@@ -1,5 +1,5 @@
 import http from "http";
-import dbConnect from "./config/dbConnect/db.connect";
+import dbConnect from "../src/app/config/dbConnect/db.connect";
 import app from "./app";
 import dotenv from "dotenv";
 dotenv.config();

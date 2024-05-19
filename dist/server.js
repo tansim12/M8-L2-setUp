@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
-const db_connect_1 = __importDefault(require("./config/dbConnect/db.connect"));
+const db_connect_1 = __importDefault(require("../src/app/config/dbConnect/db.connect"));
 const app_1 = __importDefault(require("./app"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
