@@ -1,16 +1,14 @@
 import http from "http";
 import dbConnect from "./config/dbConnect/db.connect";
 import app from "./app";
-
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const server = http.createServer(app);
 
 const port: string | number = process.env.PORT || 5000;
 const main = async () => {
   try {
-    
-    
     await dbConnect();
     server.listen(port, async () => {
       console.log(`Db Running  ${port}`);

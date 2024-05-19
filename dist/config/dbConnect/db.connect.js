@@ -17,8 +17,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.qmivnkm.mongodb.net/?retryWrites=true&w=majority`;
 const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield mongoose_1.default.connect(uri, { dbName: "contestPlatform" }).then(() => {
-        console.log("connect by C5 mongoose");
-    });
+    try {
+        yield mongoose_1.default
+            .connect(uri, { dbName: "contestPlatform" })
+            .then(() => {
+            console.log("connect by setup mongoose");
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.default = dbConnect;

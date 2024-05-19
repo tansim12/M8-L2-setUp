@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const db_connect_1 = __importDefault(require("./config/dbConnect/db.connect"));
 const app_1 = __importDefault(require("./app"));
-require("dotenv").config();
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const server = http_1.default.createServer(app_1.default);
 const port = process.env.PORT || 5000;
 const main = () => __awaiter(void 0, void 0, void 0, function* () {

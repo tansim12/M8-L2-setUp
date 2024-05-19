@@ -9,7 +9,9 @@ const normalMiddleware_1 = __importDefault(require("./middleware/normalMiddlewar
 const app = (0, express_1.default)();
 (0, normalMiddleware_1.default)(app);
 app.get("/", (req, res) => {
-    res.send("Level-2 setup ");
+    const a = 55;
+    // res.send("Level-2 setup ");
+    res.send(a);
 });
 app.all("*", (req, res, next) => {
     const error = new Error(`Can't find ${req.url} on the server`);

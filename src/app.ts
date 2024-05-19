@@ -6,7 +6,9 @@ const app: Application = express();
 normalMiddleware(app);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Level-2 setup ");
+  const a = 55;
+  // res.send("Level-2 setup ");
+  res.send(a);
 });
 
 app.all("*", (req: Request, res: Response, next) => {
