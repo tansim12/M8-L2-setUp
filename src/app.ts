@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import globalErrorHandler from "./Error-Handle/globalErrorHandle";
 import normalMiddleware from "./middleware/normalMiddleware";
-type App = ReturnType<typeof express>;
-const app:App = express();
+
+const app: Application = express();
 normalMiddleware(app);
 
 app.get("/", (req: Request, res: Response) => {
@@ -14,6 +14,7 @@ app.all("*", (req: Request, res: Response, next) => {
   next(error);
 });
 
+// global error handle
 app.use(globalErrorHandler);
 
 export default app;

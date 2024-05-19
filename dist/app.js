@@ -15,5 +15,6 @@ app.all("*", (req, res, next) => {
     const error = new Error(`Can't find ${req.url} on the server`);
     next(error);
 });
+// global error handle
 app.use(globalErrorHandle_1.default);
 exports.default = app;

@@ -1,8 +1,8 @@
-import express from "express";
+import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-type App = ReturnType<typeof express>;
-const normalMiddleware = (app:App) => {
+
+const normalMiddleware = (app: Application) => {
   app.use(
     cors({
       origin: ["http://localhost:5173", "http://localhost:5174"],
