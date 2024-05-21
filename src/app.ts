@@ -1,9 +1,20 @@
 import express, { Application, Request, Response } from "express";
 import globalErrorHandler from "../src/app/Error-Handle/globalErrorHandle";
 import normalMiddleware from "../src/app/middleware/normalMiddleware";
+import { studentRoute } from "./app/module/Student/student.route";
 
 const app: Application = express();
 normalMiddleware(app);
+
+
+
+app.use("/api/v1/students/",studentRoute);
+
+
+
+
+
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Level-2 setup ");
