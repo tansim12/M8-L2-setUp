@@ -15,19 +15,18 @@ export interface Guardian {
 }
 
 export interface Name {
-  
-    firstName: string;
-    lastName: string;
-    middleName?: string;
-  
+  firstName: string;
+  lastName: string;
+  middleName?: string;
 }
 
 export interface Student {
-  id:string,
-  name:Name ;
+  id: string;
+  name: Name;
   email: string;
   age: number;
-  gender: "male" | "female"| "other";
+  password: string;
+  gender: "male" | "female" | "other";
   dateOfBirth: string;
   blood: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   address: Address;

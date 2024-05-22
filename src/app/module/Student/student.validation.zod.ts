@@ -45,6 +45,7 @@ const StudentSchema = z.object({
   id: z.string().nonempty({ message: "ID is required" }),
   name: NameSchema,
   age: z.number().positive({ message: "Age is required" }),
+  password: z.string().nonempty({ message: "password is required" }),
   email: z
     .string()
     .email({ message: "Email must be a valid email" })

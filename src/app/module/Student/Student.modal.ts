@@ -1,6 +1,9 @@
 import { Schema, model, connect } from "mongoose";
 import { Address, Guardian, Name, Student } from "./Student.interface";
 import validator from "validator";
+import Bcrypt from "bcrypt";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Address schema
 const AddressSchema = new Schema<Address>({
@@ -56,6 +59,7 @@ const StudentSchema = new Schema<Student>({
     required: [true, "Name is required"],
   },
   age: { type: Number, required: [true, "Age is required"] },
+  password: { type: String, required: [true, "Password is required"] },
   email: {
     type: String,
     required: [true, "Email is required"],
@@ -90,6 +94,26 @@ const StudentSchema = new Schema<Student>({
     default: "active",
   },
 });
+
+// using middleware pre hook    === Before
+StudentSchema.pre("save", async function (next: Function) {
+  const userData = this;
+  userData.password = await Bcrypt.hash(
+    this.password,
+    Number(process.env.BCRYPT_NUMBER)
+  );
+  next()
+});
+
+
+
+// after post  middle ware 
+StudentSchema.post("save", async function (doc , next) {
+  console.log({doc});
+  doc.password = ""
+  next()
+  
+})
 
 const StudentModel = model<Student>("Student", StudentSchema);
 export default StudentModel;
