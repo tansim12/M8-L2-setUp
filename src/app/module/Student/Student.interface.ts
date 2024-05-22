@@ -27,7 +27,7 @@ export interface Student {
   name:Name ;
   email: string;
   age: number;
-  gender: "male" | "female";
+  gender: "male" | "female"| "other";
   dateOfBirth: string;
   blood: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   address: Address;
