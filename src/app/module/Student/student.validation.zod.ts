@@ -67,6 +67,7 @@ const StudentSchema = z.object({
     }),
   contactNo: z.string().nonempty({ message: "Contact number is required" }),
   isActive: z.enum(["active", "inactive"]).default("active"),
+  isDelete: z.boolean(),
 });
 
 export default StudentSchema;

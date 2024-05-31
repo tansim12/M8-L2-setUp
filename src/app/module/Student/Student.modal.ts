@@ -93,27 +93,39 @@ const StudentSchema = new Schema<Student>({
     enum: ["active", "inactive"],
     default: "active",
   },
+  isDelete: { type: Boolean, default: false },
 });
 
-// using middleware pre hook    === Before
+// using middleware pre hook by save data   === Before
 StudentSchema.pre("save", async function (next: Function) {
   const userData = this;
   userData.password = await Bcrypt.hash(
     this.password,
     Number(process.env.BCRYPT_NUMBER)
   );
-  next()
+  next();
 });
 
+// after save data  middle ware
+StudentSchema.post("save", async function (doc, next) {
+  doc.password = "";
+  next();
+});
 
+// find  middleware
+StudentSchema.pre("find", async function (next: Function) {
+  this.find({ isDelete: { $ne: true } });
+  next();
+});
+// find one middleWare
+StudentSchema.pre("findOne", async function (next: Function) {
+  this.find({ isDelete: { $ne: true } });
+  next();
+});
 
-// after post  middle ware 
-StudentSchema.post("save", async function (doc , next) {
-  console.log({doc});
-  doc.password = ""
-  next()
-  
-})
-
+StudentSchema.pre("aggregate", async function (next: Function) {
+  this.pipeline().unshift({ $match: { isDelete: { $ne: true } } });
+  next();
+});
 const StudentModel = model<Student>("Student", StudentSchema);
 export default StudentModel;

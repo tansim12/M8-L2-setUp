@@ -2,12 +2,16 @@ import StudentSchemaJoi from "../student.validation";
 import { studentService } from "./student.service";
 import { Request, Response } from "express";
 import StudentSchemaZod from "./student.validation.zod";
+import {
+  errorResponse,
+  successResponse,
+} from "../../Re-useable/CustomResponse";
 
 const postStudentData = async (req: Request, res: Response) => {
   try {
     const studentBody: any = req.body.student;
 
-    // joi validation 
+    // joi validation
     // const { error, value } = StudentSchemaJoi.validate(studentBody);
     // const result: any = await studentService.createStudent(value); // value is validate  data by joi
     // if (error) {
@@ -18,9 +22,8 @@ const postStudentData = async (req: Request, res: Response) => {
     //   });
     // }
 
-
-    // zod validation 
-    const zodParseStudentBody = StudentSchemaZod.parse(studentBody)
+    // zod validation
+    const zodParseStudentBody = StudentSchemaZod.parse(studentBody);
     const result: any = await studentService.createStudent(zodParseStudentBody);
 
     if (result.status === 202) {
@@ -63,11 +66,25 @@ const getAllStudent = async (req: Request, res: Response) => {
 const findOneStudentData = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.studentId;
-    console.log(id);
-    const result = await studentService.oneStudent(id);
+
+    const result: any = await studentService.oneStudent(id);
+    if (result.success === false) {
+      return res.status(202).send(errorResponse(result.message));
+    }
+
+    res.status(200).send(successResponse(result, "data Get one student"));
+  } catch (error) {
+    res.status(500).send(errorResponse(error));
+  }
+};
+
+const deleteOneData = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.studentId;
+    const result = await studentService.deleteById(id);
     res.send({
       success: true,
-      message: "data Get one student",
+      message: "data Delete",
       data: result,
     });
   } catch (error) {
@@ -83,4 +100,5 @@ export const studentController = {
   postStudentData,
   getAllStudent,
   findOneStudentData,
+  deleteOneData,
 };

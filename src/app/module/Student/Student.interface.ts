@@ -34,4 +34,5 @@ export interface Student {
   contactNo: string;
   profileImg?: any;
   isActive: "active" | "inactive";
+  isDelete:boolean
 }
