@@ -40,7 +40,17 @@ const oneStudent = async (id: string) => {
 
 const deleteById = async (id: string) => {
   const result = await StudentModel.updateOne({ id }, { isDelete: true });
-  return result;
+  console.log(result);
+  if (result.modifiedCount >0) {
+    return result
+  }else{
+    return {
+      success: false,
+      message: "No find Data",
+    };
+  }
+  
+  
 };
 
 export const studentService = {

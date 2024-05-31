@@ -81,12 +81,12 @@ const findOneStudentData = async (req: Request, res: Response) => {
 const deleteOneData = async (req: Request, res: Response) => {
   try {
     const id = req.params.studentId;
-    const result = await studentService.deleteById(id);
-    res.send({
-      success: true,
-      message: "data Delete",
-      data: result,
-    });
+    const result:any = await studentService.deleteById(id);
+    if (result.success === false) {
+      return res.status(202).send(errorResponse(result));
+    }
+
+    res.status(200).send(successResponse(result, "student data delete"));
   } catch (error) {
     res.status(500).send({
       success: false,
