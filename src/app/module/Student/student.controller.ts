@@ -1,4 +1,4 @@
-import StudentSchemaJoi from "../student.validation";
+import StudentSchemaJoi from "./student.validation";
 import { studentService } from "./student.service";
 import { Request, Response } from "express";
 import StudentSchemaZod from "./student.validation.zod";

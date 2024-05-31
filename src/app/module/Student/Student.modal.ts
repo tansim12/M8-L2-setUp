@@ -1,6 +1,6 @@
-import { Schema, model, connect } from "mongoose";
+import { Schema, model } from "mongoose";
 import { Address, Guardian, Name, Student } from "./Student.interface";
-import validator from "validator";
+
 import Bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
