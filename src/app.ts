@@ -10,7 +10,7 @@ normalMiddleware(app);
 
 
 app.use("/api/v1/students/",studentRoute);
-app.use("/api/v1/user",userRoute);
+app.use("/api/v1/users",userRoute);
 
 
 

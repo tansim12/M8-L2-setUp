@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import dotenv from "dotenv";
+import Bcrypt from 'bcrypt';
 import { TUser } from "./User.interface";
 dotenv.config();
 
@@ -12,7 +13,9 @@ const UserSchema = new Schema<TUser>(
     },
     password: { 
       type: String, 
-      required: [true, 'Password is required.'] 
+      required: [true, 'Password is required.'] ,
+      min:8,
+      max:20
     },
     needsPasswordChange: { 
       type: Boolean, 
@@ -36,6 +39,22 @@ const UserSchema = new Schema<TUser>(
     timestamps: true,
   }
 );
+
+// using middleware pre hook by save data   === Before
+UserSchema.pre("save", async function (next: Function) {
+    const userData = this;
+    userData.password = await Bcrypt.hash(
+      this.password,
+      Number(process.env.BCRYPT_NUMBER)
+    );
+    next();
+  });
+  
+  // after save data  middle ware
+  UserSchema.post("save", async function (doc, next) {
+    doc.password = "";
+    next();
+  });
 
 const UserModel = model<TUser>("User", UserSchema);
 
