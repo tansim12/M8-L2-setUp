@@ -10,5 +10,13 @@ router.post(
   validationMiddleWare(SemesterSchemaZod),
   semesterController.createSemester
 );
+router.get(
+  "/:semesterId",
+  semesterController.getOneSemester
+);
+router.patch(
+  "/:semesterId",
+  semesterController.updateSemesterData
+);
 
 export const academicSemester = router;
