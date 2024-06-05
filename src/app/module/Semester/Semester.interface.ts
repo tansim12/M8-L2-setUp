@@ -12,12 +12,14 @@ export type TMonth =
   | "October"
   | "November"
   | "December";
+export type TName = "Autumn" | "Summer" | "Fall";
+export type TCode = "01" | "02" | "03";
 
 // Define an interface for semesters
 export interface TSemester {
-  name: "Autumn" | "Summer" | "Fall";
-  code: "01" | "02" | "03";
-  year: Date;
+  name: TName;
+  code: TCode;
+  year: string;
   startMonth: TMonth;
   endMonth: TMonth;
 }

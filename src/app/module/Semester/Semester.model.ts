@@ -1,44 +1,37 @@
 import { Schema, model } from "mongoose";
-import { TMonth, TSemester } from "./Semester.interface";
-
-const monthArray: TMonth[] = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { TCode, TMonth, TName, TSemester } from "./Semester.interface";
+import {
+  semesterCodeArray,
+  semesterMonthArray,
+  semesterNameArray,
+} from "./Semester.constVariable";
+import { string } from "joi";
 
 const SemesterSchema = new Schema<TSemester>(
   {
     name: {
       type: String,
-      enum: ["Autumn", "Summer", "Fall"],
+      enum: semesterNameArray,
       required: true,
     },
     code: {
       type: String,
-      enum: ["01", "02", "03"],
+      enum: semesterCodeArray,
       required: true,
     },
     year: {
-      type: Date,
+      type: String,
       required: true,
     },
     startMonth: {
       type: String,
-      enum: monthArray,
+      enum: semesterMonthArray,
+      required: true,
     },
     endMonth: {
       type: String,
-      enum: monthArray,
+      enum: semesterMonthArray,
+      required: true,
     },
   },
   {
@@ -46,6 +39,6 @@ const SemesterSchema = new Schema<TSemester>(
   }
 );
 
-const SemesterModel = model<TSemester>("Semester", SemesterSchema)
+const SemesterModel = model<TSemester>("Semester", SemesterSchema);
 
-export default SemesterModel
+export default SemesterModel;
