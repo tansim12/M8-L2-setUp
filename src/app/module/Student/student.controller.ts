@@ -7,42 +7,6 @@ import {
   successResponse,
 } from "../../Re-useable/CustomResponse";
 
-const postStudentData = async (req: Request, res: Response) => {
-  try {
-    const studentBody: any = req.body.student;
-
-    // joi validation
-    // const { error, value } = StudentSchemaJoi.validate(studentBody);
-    // const result: any = await studentService.createStudent(value); // value is validate  data by joi
-    // if (error) {
-    //   res.status(500).send({
-    //     success: false,
-    //     message: "something went wrong",
-    //     err: error,
-    //   });
-    // }
-
-    // zod validation
-    const zodParseStudentBody = StudentSchemaZod.parse(studentBody);
-    const result: any = await studentService.createStudent(zodParseStudentBody);
-
-    if (result.status === 202) {
-      res.status(202).send(result);
-    } else {
-      res.status(200).send({
-        success: true,
-        message: "Student create successfully done",
-        data: result,
-      });
-    }
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "something went wrong",
-      err: error,
-    });
-  }
-};
 
 const getAllStudent = async (req: Request, res: Response) => {
   try {
@@ -97,7 +61,7 @@ const deleteOneData = async (req: Request, res: Response) => {
 };
 
 export const studentController = {
-  postStudentData,
+  // postStudentData,
   getAllStudent,
   findOneStudentData,
   deleteOneData,

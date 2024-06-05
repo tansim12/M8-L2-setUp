@@ -54,15 +54,22 @@ const NameSchema = new Schema<Name>({
 // Student schema
 const StudentSchema = new Schema<Student>({
   id: { type: String, required: [true, "ID is required"], unique: true },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, " user ID is required"],
+    unique: true,
+    ref:"UserModel"
+  },
   name: {
     type: NameSchema,
     required: [true, "Name is required"],
   },
   age: { type: Number, required: [true, "Age is required"] },
-  password: { type: String, required: [true, "Password is required"] },
+  
   email: {
     type: String,
     required: [true, "Email is required"],
+    unique:true
   },
   gender: {
     type: String,
@@ -94,22 +101,6 @@ const StudentSchema = new Schema<Student>({
     default: "active",
   },
   isDelete: { type: Boolean, default: false },
-});
-
-// using middleware pre hook by save data   === Before
-StudentSchema.pre("save", async function (next: Function) {
-  const userData = this;
-  userData.password = await Bcrypt.hash(
-    this.password,
-    Number(process.env.BCRYPT_NUMBER)
-  );
-  next();
-});
-
-// after save data  middle ware
-StudentSchema.post("save", async function (doc, next) {
-  doc.password = "";
-  next();
 });
 
 // find  middleware

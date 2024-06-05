@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface Address {
   currentAddress: string;
   permanentAddress: string;
@@ -21,13 +23,13 @@ export interface Name {
 }
 
 export interface Student {
-  id: string;
+  id?: string;
   name: Name;
   email: string;
   age: number;
-  password: string;
+  user?: Types.ObjectId,
   gender: "male" | "female" | "other";
-  dateOfBirth: string;
+  dateOfBirth?: string;
   blood: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   address: Address;
   guardian: Guardian;
