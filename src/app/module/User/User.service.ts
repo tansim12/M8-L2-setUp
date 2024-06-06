@@ -1,8 +1,9 @@
-
 import { TUser } from "./User.interface";
 import UserModel from "./User.model";
 import StudentModel from "../Student/Student.modal";
 import { Student } from "../Student/Student.interface";
+import SemesterModel from "../Semester/Semester.model";
+import { generateId } from "./User.utils";
 
 const userPostDataDB = async (studentData: Student, password: string) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
@@ -13,10 +14,20 @@ const userPostDataDB = async (studentData: Student, password: string) => {
     };
   } else {
     let userData: Partial<TUser> = {};
-    const studentId = "203010006";
     userData.password = password || "565896322";
-    userData.id = studentId;
-    userData.role = "student";
+
+    // generate semester id by year code 4 digit number
+    const findSemester = await SemesterModel.findById({
+      _id: studentData?.admissionSemester,
+    });
+
+    if (findSemester) {
+      // call generateId 
+      userData.id = await generateId(findSemester) ;
+      userData.role = "student";
+      
+    }
+
 
     // create a user
     const userResult = await UserModel.create(userData);

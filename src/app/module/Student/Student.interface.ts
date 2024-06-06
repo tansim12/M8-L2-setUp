@@ -28,6 +28,7 @@ export interface Student {
   email: string;
   age: number;
   user?: Types.ObjectId,
+  admissionSemester?: Types.ObjectId,
   gender: "male" | "female" | "other";
   dateOfBirth?: string;
   blood: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";

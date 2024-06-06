@@ -1,13 +1,13 @@
 import express from "express";
 import { semesterController } from "./Semester.controller";
 import validationMiddleWare from "../../middleware/ZodSchemaValidationMiddleware";
-import SemesterSchemaZod from "./Semester.zodValidation";
+import  { semesterZodValidation } from "./Semester.zodValidation";
 
 const router = express.Router();
 
 router.post(
   "/create-academic-semester",
-  validationMiddleWare(SemesterSchemaZod),
+  validationMiddleWare(semesterZodValidation.SemesterSchemaZod),
   semesterController.createSemester
 );
 router.get(
@@ -15,7 +15,7 @@ router.get(
   semesterController.getOneSemester
 );
 router.patch(
-  "/:semesterId",
+  "/:semesterId",validationMiddleWare(semesterZodValidation.UpdateSemesterSchemaZod),
   semesterController.updateSemesterData
 );
 

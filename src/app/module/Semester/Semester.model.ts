@@ -6,11 +6,6 @@ import {
   semesterNameArray,
 } from "./Semester.constVariable";
 
-interface TNameAndCode{
-  Autumn: "01";
-  Summer: "02";
-  Fall: "03";
-} 
 
 const SemesterSchema = new Schema<TSemester>(
   {
@@ -45,19 +40,6 @@ const SemesterSchema = new Schema<TSemester>(
 );
 
 SemesterSchema.pre("save", async function (next: Function) {
-  const nameWiseCode:TNameAndCode = {
-    Autumn: "01",
-    Summer: "02",
-    Fall: "03",
-  };
-
-
-
-  const isCheck = nameWiseCode[this.name] !== this.code
-  if (isCheck) {
-    throw new Error("Invalid code and name")
-  }
-
   const isExistsYearAndName = await SemesterModel.findOne({
     year: this.year,
     name: this.name,

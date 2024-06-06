@@ -58,18 +58,24 @@ const StudentSchema = new Schema<Student>({
     type: Schema.Types.ObjectId,
     required: [true, " user ID is required"],
     unique: true,
-    ref:"UserModel"
+    ref: "UserModel",
+  },
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    required: [true, " admissionSemester ID is required"],
+
+    ref: "SemesterModel",
   },
   name: {
     type: NameSchema,
     required: [true, "Name is required"],
   },
   age: { type: Number, required: [true, "Age is required"] },
-  
+
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique:true
+    unique: true,
   },
   gender: {
     type: String,

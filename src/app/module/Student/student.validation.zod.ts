@@ -74,6 +74,7 @@ const StudentSchemaZod = z.object({
       blood: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
         message: "Blood type is required",
       }),
+      admissionSemester:z.string().optional(),
       dateOfBirth: z.string().optional(),
       contactNo: z.string().nonempty({ message: "Contact number is required" }),
       isActive: z.enum(["active", "inactive"]).default("active"),

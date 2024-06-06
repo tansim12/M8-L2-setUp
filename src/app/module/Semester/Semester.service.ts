@@ -3,7 +3,24 @@ import StudentModel from "../Student/Student.modal";
 import { TSemester } from "./Semester.interface";
 import SemesterModel from "./Semester.model";
 
+interface TNameAndCode {
+  Autumn: "01";
+  Summer: "02";
+  Fall: "03";
+}
+
+const nameWiseCode: TNameAndCode = {
+  Autumn: "01",
+  Summer: "02",
+  Fall: "03",
+};
+
 const createSemesterDB = async (semesterBody: TSemester) => {
+  const isCheck = nameWiseCode[semesterBody.name] !== semesterBody.code;
+  if (isCheck) {
+    throw new Error("Invalid code and name");
+  }
+
   const semesterData = await SemesterModel.create(semesterBody);
   return semesterData;
 
@@ -27,7 +44,13 @@ const getOneSemesterDataDB = async (id: string) => {
 };
 
 const updateSemesterDB = async (id: string, payload: TSemester) => {
-    
+  if (payload?.name && payload.code) {
+    const isCheck = nameWiseCode[payload.name] !== payload.code;
+    if (isCheck) {
+      throw new Error("Invalid code and name");
+    }
+  }
+
   const result = await SemesterModel.findByIdAndUpdate(
     { _id: id },
     {
@@ -37,6 +60,7 @@ const updateSemesterDB = async (id: string, payload: TSemester) => {
     },
     { new: true }
   );
+  
   if (result) {
     return result;
   } else {
