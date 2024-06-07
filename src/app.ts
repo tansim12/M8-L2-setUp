@@ -4,6 +4,7 @@ import normalMiddleware from "../src/app/middleware/normalMiddleware";
 import { studentRoute } from "./app/module/Student/student.route";
 import { userRoute } from "./app/module/User/User.route";
 import { academicSemester } from "./app/module/Semester/Semester.route";
+import { academicFacultyRoute } from "./app/module/Academic Faculty/AcademicFaculty.route";
 
 const app: Application = express();
 normalMiddleware(app);
@@ -13,6 +14,7 @@ normalMiddleware(app);
 app.use("/api/v1/students/",studentRoute);
 app.use("/api/v1/users",userRoute);
 app.use("/api/v1/academic-semester",academicSemester);
+app.use("/api/v1/academic-faculty",academicFacultyRoute);
 
 
 
