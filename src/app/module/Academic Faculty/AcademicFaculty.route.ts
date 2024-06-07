@@ -1,18 +1,18 @@
 import express from "express";
 import validationMiddleWare from "../../middleware/ZodSchemaValidationMiddleware";
-import { academicZodValidation } from "./AcademicFaculty.zodValidation ";
+import {  academicFacultyZodValidation } from "./AcademicFaculty.zodValidation ";
 import { academicFacultyController } from "./AcademicFaculty.controller";
 
 const router = express.Router();
 
 router.post(
   "/academic-faculty-create",
-  validationMiddleWare(academicZodValidation.AcademicFacultySchemaZod),
+  validationMiddleWare(academicFacultyZodValidation.AcademicFacultySchemaZod),
   academicFacultyController.createAcademicFaculty
 );
 router.patch(
   "/:facultyId",
-  validationMiddleWare(academicZodValidation.updateAcademicFacultySchemaZod),
+  validationMiddleWare(academicFacultyZodValidation.updateAcademicFacultySchemaZod),
   academicFacultyController.updateAcademicFaculty
 );
 router.get(
