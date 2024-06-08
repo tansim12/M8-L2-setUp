@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TAcademicDepartment } from "./AcademicDepartment.interface";
-import { NextFunction } from "express";
-import { errorResponse } from "../../Re-useable/CustomResponse";
+
 
 const AcademicDepartmentSchema = new Schema<TAcademicDepartment>(
   {
@@ -12,7 +11,7 @@ const AcademicDepartmentSchema = new Schema<TAcademicDepartment>(
     },
     academicFaculty: {
       type: Schema.Types.ObjectId,
-      ref: "AcademicFacultyModel",
+      ref: "AcademicFaculty",   // ref should be collection  name not be  Model name 
     },
   },
   {

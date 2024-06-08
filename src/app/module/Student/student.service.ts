@@ -1,19 +1,26 @@
 
 import StudentModel from "./Student.modal";
 const allStudents = async () => {
-  const result = await StudentModel.find();
+  const result = await StudentModel.find().populate("admissionSemester").populate({
+    path:"academicDepartment",
+    populate:{
+      path:"academicFaculty"
+    }
+  });
   return result;
 };
 
 // get one student
 const oneStudent = async (id: string) => {
   // const result = await StudentModel.findOne({ id: id });
-  const result = await StudentModel.aggregate([
-    {
-      $match: { id: id },
-    },
-  ]);
-  if (result.length) {
+  const result = await StudentModel.findById(id).populate("admissionSemester").populate({
+    path:"academicDepartment",
+    populate:{
+      path:"academicFaculty"
+    }
+  })
+
+  if (result) {
     return result;
   } else {
     return {

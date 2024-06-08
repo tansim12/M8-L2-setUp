@@ -64,7 +64,13 @@ const StudentSchema = new Schema<Student>({
     type: Schema.Types.ObjectId,
     required: [true, " admissionSemester ID is required"],
 
-    ref: "SemesterModel",
+    ref: "Semester",   // ref should be collection  name not be  Model name 
+  },
+  academicDepartment : {
+    type: Schema.Types.ObjectId,
+    required: [true, " admissionSemester ID is required"],
+
+    ref: "AcademicDepartment",  // ref should be collection  name not be  Model name 
   },
   name: {
     type: NameSchema,
