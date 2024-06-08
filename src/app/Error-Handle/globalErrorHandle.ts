@@ -6,8 +6,9 @@ const globalErrorHandler = (
   res: Response,
   next: any,
 ) => {
+
   // format error
-  res.status(500).send({
+  res.status(err.statusCode | 500).send({
     message: err.message,
     errors: err.errors,
   });
