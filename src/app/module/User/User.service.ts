@@ -4,6 +4,9 @@ import StudentModel from "../Student/Student.modal";
 import { Student } from "../Student/Student.interface";
 import SemesterModel from "../Semester/Semester.model";
 import { generateId } from "./User.utils";
+import mongoose from "mongoose";
+import AppError from "../../Error-Handle/AppError";
+import httpStatus from "http-status";
 
 const userPostDataDB = async (studentData: Student, password: string) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
@@ -21,22 +24,41 @@ const userPostDataDB = async (studentData: Student, password: string) => {
       _id: studentData?.admissionSemester,
     });
 
-    if (findSemester) {
-      // call generateId 
-      userData.id = await generateId(findSemester) ;
-      userData.role = "student";
-      
-    }
+    //  crate a acid operation
+    // creating session
+    const session = await mongoose.startSession(); // step 1 creating session
 
+    try {
+      session.startTransaction(); // step 2 start Transaction session
+      if (findSemester) {
+        // call generateId
+        userData.id = await generateId(findSemester);
+        userData.role = "student";
+      }
 
-    // create a user
-    const userResult = await UserModel.create(userData);
-    // create a student
-    if (Object.keys(userResult).length) {
-      studentData.id = userResult.id;
-      studentData.user = userResult._id;
-      const studentResult = await StudentModel.create(studentData);
-      return studentResult;
+      // create a user   operation write -1
+      const userResult = await UserModel.create([userData], { session });
+
+      if (userResult.length) {
+        studentData.id = userResult[0].id;
+        studentData.user = userResult[0]._id;
+        // create a student operation write -2
+        const studentResult = await StudentModel.create([studentData], {
+          session,
+        });
+
+        if (!studentResult.length) {
+          throw new AppError(httpStatus.BAD_REQUEST, "Student not creating");
+        }
+        await session.commitTransaction(); // step 3 when  creating user and student then  session commitTransaction save
+        await session.endSession();   // step 4 endSession
+        return studentResult;
+      } else {
+        throw new AppError(httpStatus.BAD_REQUEST, "user not creating");
+      }
+    } catch (error) {
+      await session.abortTransaction(); // step 5  when error then  abortTransaction 
+      await session.endSession();  // step 6 endSession
     }
   }
 };
