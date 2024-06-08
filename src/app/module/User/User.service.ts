@@ -24,7 +24,7 @@ const userPostDataDB = async (studentData: Student, password: string) => {
       _id: studentData?.admissionSemester,
     });
 
-    //  crate a acid operation
+    //  crate a acid operation   Transaction and Rollback
     // creating session
     const session = await mongoose.startSession(); // step 1 creating session
 
