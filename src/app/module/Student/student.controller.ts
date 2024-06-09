@@ -52,7 +52,7 @@ const deleteOneData = async (req: Request, res: Response, next:NextFunction) => 
 const updateStudentData: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.studentId;
-    const studentData = req.body;
+    const studentData = req.body.student;
     const result = await studentService.updateStudentDB(id, studentData);
     return res
       .status(200)

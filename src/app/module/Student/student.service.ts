@@ -95,7 +95,7 @@ const updateStudentDB = async (id: string, payload: Partial<Student>) => {
       modifiedUpdateData[`guardian.${key}`] = value;
     }
   }
-  console.log(modifiedUpdateData);
+  
 
   const result = await StudentModel.findOneAndUpdate(
     { id },

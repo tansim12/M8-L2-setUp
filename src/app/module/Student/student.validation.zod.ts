@@ -146,7 +146,7 @@ const UpdateStudentSchemaZod = z.object({
       // student
       student: z
         .object({
-          name: UpdateNameSchema.optional(),
+          name: UpdateNameSchema,
           age: z
             .number()
             .int()
@@ -162,12 +162,12 @@ const UpdateStudentSchemaZod = z.object({
               message: "Gender is required",
             })
             .optional(),
-          address: UpdateAddressSchema.optional(),
+          address: UpdateAddressSchema,
           profileImg: z
             .string()
             .nonempty({ message: "Profile image is required" })
             .optional(),
-          guardian: UpdateGuardianSchema.optional(),
+          guardian: UpdateGuardianSchema,
           blood: z
             .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
               message: "Blood type is required",
