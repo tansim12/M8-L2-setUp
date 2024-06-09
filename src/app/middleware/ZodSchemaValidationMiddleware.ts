@@ -12,7 +12,7 @@ const validationMiddleWare = (zodSchema: AnyZodObject) => {
 
       next();
     } catch (error) {
-      res.status(500).send(errorResponse(error));
+     next(error)
     }
   };
 };

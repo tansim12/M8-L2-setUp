@@ -5,7 +5,7 @@ import {
 } from "../../Re-useable/CustomResponse";
 import { academicDepartmentService } from "./AcademicDepartment.service";
 
-const createAcademicFaculty: RequestHandler = async (req, res) => {
+const createAcademicDepartment: RequestHandler = async (req, res, next) => {
   try {
     const payload = req.body;
     const result =
@@ -18,11 +18,11 @@ const createAcademicFaculty: RequestHandler = async (req, res) => {
         );
     }
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const findAllAcademicFaculty: RequestHandler = async (req, res) => {
+const findAllAcademicDepartment: RequestHandler = async (req, res, next) => {
   try {
     const result =
       await academicDepartmentService.findAllAcademicDepartmentDB();
@@ -34,11 +34,11 @@ const findAllAcademicFaculty: RequestHandler = async (req, res) => {
         );
     }
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const updateAcademicFaculty: RequestHandler = async (req, res) => {
+const updateAcademicDepartment: RequestHandler = async (req, res, next) => {
   try {
     const payload = req.body;
     const id = req.params.departmentId;
@@ -47,9 +47,6 @@ const updateAcademicFaculty: RequestHandler = async (req, res) => {
         id,
         payload
       );
-    if (result.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
 
     res
       .status(200)
@@ -57,31 +54,29 @@ const updateAcademicFaculty: RequestHandler = async (req, res) => {
         successResponse(result, "Academic Department Created Successfully done")
       );
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const findOneAcademicFaculty: RequestHandler = async (req, res) => {
+const findOneAcademicDepartment: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.departmentId;
-    const result: any =
+    const result =
       await academicDepartmentService.getOneAcademicDepartmentDB(id);
-    if (result.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
+
     res
       .status(200)
       .send(
         successResponse(result, "Academic Department Get Successfully done")
       );
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
 export const academicDepartmentController = {
-  updateAcademicFaculty,
-  createAcademicFaculty,
-  findAllAcademicFaculty,
-  findOneAcademicFaculty,
+  updateAcademicDepartment,
+  findAllAcademicDepartment,
+  createAcademicDepartment,
+  findOneAcademicDepartment,
 };

@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../Error-Handle/AppError";
 import { TAcademicDepartment } from "./AcademicDepartment.interface";
 import AcademicDepartmentModel from "./AcademicDepartment.model";
 
@@ -14,10 +16,7 @@ const getOneAcademicDepartmentDB = async (id: string) => {
   if (result) {
     return result;
   } else {
-    return {
-      success: false,
-      message: "Not found Data",
-    };
+    throw new AppError(httpStatus.NOT_FOUND, "Not found data")
   }
 };
 const updateOneAcademicDepartmentDB = async (
@@ -34,10 +33,7 @@ const updateOneAcademicDepartmentDB = async (
   if (result) {
     return result;
   } else {
-    return {
-      success: false,
-      message: "Not found Data",
-    };
+    throw new AppError(httpStatus.NOT_FOUND, "Not Found")
   }
 };
 

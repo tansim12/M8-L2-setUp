@@ -10,16 +10,16 @@ router.post(
   validationMiddleWare(
     academicDepartmentZodValidation.AcademicDepartmentSchemaZod
   ),
-  academicDepartmentController.createAcademicFaculty
+  academicDepartmentController.createAcademicDepartment
 );
 router.patch(
   "/:departmentId",
   validationMiddleWare(
     academicDepartmentZodValidation.updateAcademicDepartmentSchemaZod
   ),
-  academicDepartmentController.updateAcademicFaculty
+  academicDepartmentController.updateAcademicDepartment
 );
-router.get("/", academicDepartmentController.findAllAcademicFaculty);
-router.get("/:departmentId", academicDepartmentController.findOneAcademicFaculty);
+router.get("/", academicDepartmentController.findAllAcademicDepartment);
+router.get("/:departmentId", academicDepartmentController.findOneAcademicDepartment);
 
 export const academicDepartmentRoute = router;

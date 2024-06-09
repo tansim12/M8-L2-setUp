@@ -3,7 +3,7 @@ import { z } from "zod";
 // Define the Zod schema for TAcademicFaculty
 const AcademicDepartmentSchemaZod = z.object({
   body: z.object({
-    name: z.string().nonempty({ message: "Faculty name is required" }),
+    name: z.string().nonempty({ message: "Department name is required" }),
     academicFaculty: z
       .string()
       .nonempty({ message: "Academic faculty id is required" }),
@@ -15,7 +15,7 @@ const updateAcademicDepartmentSchemaZod = z.object({
   body: z.object({
     name: z
       .string()
-      .nonempty({ message: "Faculty name is required" })
+      .nonempty({ message: "Department name is required" })
       .optional(),
     academicFaculty: z
       .string()
