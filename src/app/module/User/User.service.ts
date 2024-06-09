@@ -59,6 +59,7 @@ const userPostDataDB = async (studentData: Student, password: string) => {
     } catch (error) {
       await session.abortTransaction(); // step 5  when error then  abortTransaction 
       await session.endSession();  // step 6 endSession
+      throw new AppError(httpStatus.FAILED_DEPENDENCY, "failed to crate student")
     }
   }
 };
