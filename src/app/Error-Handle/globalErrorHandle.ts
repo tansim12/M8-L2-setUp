@@ -6,6 +6,8 @@ import handleZodError from "./handleZodError";
 import dotenv from "dotenv";
 import handleValidationError from "./handleValidationError";
 import handleCastError from "./handleCastError";
+import handleDuplicateError from "./handleDuplicateError";
+import AppError from "./AppError";
 dotenv.config();
 
 const globalErrorHandler = (
@@ -44,11 +46,42 @@ const globalErrorHandler = (
       (message = simplifyError?.message),
       (errorSources = simplifyError?.errorSources);
   }
+  else if (err.name === "CastError") {
+    const simplifyError = handleCastError(err);
+    (statusCode = simplifyError?.statusCode),
+      (message = simplifyError?.message),
+      (errorSources = simplifyError?.errorSources);
+  }
+  else if (err.code === 11000) {
+    const simplifyError = handleDuplicateError(err);
+    (statusCode = simplifyError?.statusCode),
+      (message = simplifyError?.message),
+      (errorSources = simplifyError?.errorSources);
+  }
+
+  else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err.message;
+    errorSources = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err.message;
+    errorSources = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
+  }
 
   return res.status(statusCode).json({
     success: false,
     message,
-    errorSources,err,
+    errorSources,
     stack: process.env.NODE_ENV === "development" ? err?.stack : null,
   });
 };
