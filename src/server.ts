@@ -20,3 +20,20 @@ const main = async () => {
 };
 
 main();
+
+process.on("unhandledRejection", () => {
+  console.log(`😢😢😢😢😢😢😢😢😢😢 unhandledRejection   ... shutdown now`);
+
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+});
+
+process.on("uncaughtException", () => {
+  console.log(`😢😢😢😢😢😢😢😢😢😢 UncaughtException ... shutdown now`);
+  process.exit(1);
+});
