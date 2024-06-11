@@ -7,22 +7,29 @@ import {
   successResponse,
 } from "../../Re-useable/CustomResponse";
 
-const getAllStudent = async (req: Request, res: Response,next:NextFunction) => {
+const getAllStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const result = await studentService.allStudents();
+    
+    const result = await studentService.allStudents(req.query);
     if (result) {
-      res
-        .status(200)
-        .send({ success: true, message: "Data Get Success", data: result });
+      res.status(200).send(successResponse(result, "Data Get Success"));
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // get one student data find by id
 
-const findOneStudentData = async (req: Request, res: Response, next:NextFunction) => {
+const findOneStudentData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const id: string = req.params.studentId;
 
@@ -31,11 +38,15 @@ const findOneStudentData = async (req: Request, res: Response, next:NextFunction
       .status(200)
       .send(successResponse(result, "data Get one student"));
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-const deleteOneData = async (req: Request, res: Response, next:NextFunction) => {
+const deleteOneData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const id = req.params.studentId;
     const result: any = await studentService.deleteById(id);
@@ -45,7 +56,7 @@ const deleteOneData = async (req: Request, res: Response, next:NextFunction) => 
 
     res.status(200).send(successResponse(result, "student data delete"));
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -65,5 +76,6 @@ const updateStudentData: RequestHandler = async (req, res, next) => {
 export const studentController = {
   getAllStudent,
   findOneStudentData,
-  deleteOneData,updateStudentData
+  deleteOneData,
+  updateStudentData,
 };

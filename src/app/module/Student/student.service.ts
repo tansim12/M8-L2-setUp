@@ -4,8 +4,34 @@ import UserModel from "../User/User.model";
 import AppError from "../../Error-Handle/AppError";
 import httpStatus from "http-status";
 import { Student } from "./Student.interface";
-const allStudents = async () => {
-  const result = await StudentModel.find()
+const allStudents = async (queryParams: Record<string, unknown>) => {
+  const queryObj = { ...queryParams };
+  
+  
+  // should be query
+  // {"name.firstName":{$regex:queryParams?.searchTerm, $options:"1"}}
+  // {email:{$regex:queryParams?.searchTerm, $options:"i"}}
+
+  const searchAbleFields = ["name.firstName", "email"];
+  const excludeFields = ["searchTerm", ];
+
+ let searchTerm = "";
+  if (queryParams && typeof queryParams.searchTerm === 'string') {
+    searchTerm = queryParams.searchTerm;
+  }
+
+  excludeFields.forEach((el) => delete queryObj[el]);
+
+
+  const searchQuery = StudentModel.find({
+    $or: searchAbleFields.map((item) => ({
+      [item]: { $regex: searchTerm, $options: "i" },
+    })),
+  });
+console.log({queryObj, queryParams});
+
+  const result = await searchQuery
+    .find(queryObj)
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -13,7 +39,12 @@ const allStudents = async () => {
         path: "academicFaculty",
       },
     });
-  return result;
+
+  if (result.length) {
+    return result;
+  } else {
+    throw new AppError(404, "Data Not found");
+  }
 };
 
 // get one student
@@ -95,7 +126,6 @@ const updateStudentDB = async (id: string, payload: Partial<Student>) => {
       modifiedUpdateData[`guardian.${key}`] = value;
     }
   }
-  
 
   const result = await StudentModel.findOneAndUpdate(
     { id },
