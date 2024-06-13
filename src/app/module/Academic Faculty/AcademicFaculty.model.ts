@@ -1,6 +1,8 @@
 import { Schema, model } from "mongoose";
 import { TAcademicFaculty, TAddress, TName } from "./AcademicFaculty.interface";
-
+import { NextFunction } from "express";
+import AppError from "../../Error-Handle/AppError";
+import AcademicDepartmentModel from "../Academic Department/AcademicDepartment.model";
 
 // Schema definitions
 const AddressSchema = new Schema<TAddress>({
@@ -44,6 +46,43 @@ const AcademicFacultySchema = new Schema<TAcademicFaculty>(
     timestamps: true,
   }
 );
+
+AcademicFacultySchema.pre("save", async function (next) {
+  const academicDepartmentId = this.academicDepartment;
+
+  // Check if academicDepartment exists only if it's provided
+  if (academicDepartmentId) {
+    const isExist = await AcademicDepartmentModel.findOne({
+      _id: academicDepartmentId,
+    });
+
+    if (isExist === null) {
+      throw new AppError(404, "This Academic Department does not exist!");
+    }
+  }
+
+  next();
+});
+
+// check same faculty email and same department
+AcademicFacultySchema.pre("save", async function (next) {
+  const academicDepartmentId = this.academicDepartment;
+  const facultyEmail = this.email;
+
+  // Check if academicDepartment exists only if it's provided
+  if (academicDepartmentId && facultyEmail) {
+    const isExist = await AcademicFacultyModel.findOne({
+      academicDepartment: academicDepartmentId,
+      email: facultyEmail,
+    });
+
+    if (isExist) {
+      throw new AppError(404, "This Academic Department does not exist!");
+    }
+  }
+
+  next();
+});
 
 const AcademicFacultyModel = model<TAcademicFaculty>(
   "AcademicFaculty",
