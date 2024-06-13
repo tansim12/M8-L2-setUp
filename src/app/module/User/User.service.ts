@@ -3,15 +3,17 @@ import UserModel from "./User.model";
 import StudentModel from "../Student/Student.modal";
 import { Student } from "../Student/Student.interface";
 import SemesterModel from "../Semester/Semester.model";
-import { generateId } from "./User.utils";
+import { generateDynamicId, generateId } from "./User.utils";
 import mongoose from "mongoose";
 import AppError from "../../Error-Handle/AppError";
 import httpStatus from "http-status";
+import { TAcademicFaculty } from "../Academic Faculty/AcademicFaculty.interface";
+import AcademicFacultyModel from "../Academic Faculty/AcademicFaculty.model";
 
-const userPostDataDB = async (studentData: Student, password: string) => {
+const createStudentDB = async (studentData: Student, password: string) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
   if (isExist) {
-   throw new AppError(400, '"user already exist"')
+    throw new AppError(400, '"user already exist"');
   } else {
     let userData: Partial<TUser> = {};
     userData.password = password || "565896322";
@@ -48,19 +50,62 @@ const userPostDataDB = async (studentData: Student, password: string) => {
           throw new AppError(httpStatus.BAD_REQUEST, "Student not creating");
         }
         await session.commitTransaction(); // step 3 when  creating user and student then  session commitTransaction save
-        await session.endSession();   // step 4 endSession
+        await session.endSession(); // step 4 endSession
         return studentResult;
       } else {
         throw new AppError(httpStatus.BAD_REQUEST, "user not creating");
       }
     } catch (error) {
-      await session.abortTransaction(); // step 5  when error then  abortTransaction 
-      await session.endSession();  // step 6 endSession
-      throw new AppError(httpStatus.FAILED_DEPENDENCY, "failed to crate student")
+      await session.abortTransaction(); // step 5  when error then  abortTransaction
+      await session.endSession(); // step 6 endSession
+      throw new AppError(
+        httpStatus.FAILED_DEPENDENCY,
+        "failed to crate student"
+      );
     }
   }
 };
 
+const createAcademicFacultyDB = async (
+  payload: Partial<TAcademicFaculty>,
+  password: string
+) => {
+  const type :string = "faculty"
+  const session = await mongoose.startSession();
+  let userData: Partial<TUser> = {};
+  userData.password = password || "565896322";
+  userData.id = await generateDynamicId(type);
+  userData.role = "faculty";
+
+ 
+
+  try {
+     session.startTransaction()
+     const userResult = await UserModel.create([userData], { session }); 
+     if (userResult.length) {
+      payload.id = userResult[0]?.id
+      payload.user = userResult[0]?._id
+
+      const facultyResult   = await AcademicFacultyModel.create([payload], {session})
+    
+      
+      if (!facultyResult.length) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Faulty Create Failed")
+      }
+      await session.commitTransaction()
+      await session.endSession()
+      return facultyResult
+     }else{
+      throw new AppError(httpStatus.BAD_REQUEST, "User Create Failed")
+     }
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new AppError(httpStatus.BAD_REQUEST, "Faculty Create Failed2");
+    
+  }
+};
 export const userService = {
-  userPostDataDB,
+  createStudentDB,
+  createAcademicFacultyDB,
 };

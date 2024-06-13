@@ -5,22 +5,6 @@ import {
 } from "../../Re-useable/CustomResponse";
 import { academicFacultyService } from "./AcademicFaculty.service";
 
-const createAcademicFaculty: RequestHandler = async (req, res) => {
-  try {
-    const payload = req.body;
-    const result =
-      await academicFacultyService.createAcademicFacultyDB(payload);
-    if (result) {
-      return res
-        .status(200)
-        .send(
-          successResponse(result, "Academic Faculty Created Successfully done")
-        );
-    }
-  } catch (error) {
-    res.status(500).send(errorResponse(error));
-  }
-};
 
 const findAllAcademicFaculty: RequestHandler = async (req, res) => {
   try {
@@ -78,7 +62,7 @@ const findOneAcademicFaculty: RequestHandler = async (req, res) => {
 
 export const academicFacultyController = {
   updateAcademicFaculty,
-  createAcademicFaculty,
+  
   findAllAcademicFaculty,
   findOneAcademicFaculty,
 };

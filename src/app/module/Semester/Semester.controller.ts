@@ -4,9 +4,8 @@ import {
   successResponse,
 } from "../../Re-useable/CustomResponse";
 import { semesterService } from "./Semester.service";
-import { ObjectId } from "mongoose";
 
-const createSemester: RequestHandler = async (req, res) => {
+const createSemester: RequestHandler = async (req, res, next) => {
   try {
     const semesterBody = req.body;
     const result = await semesterService.createSemesterDB(semesterBody);
@@ -14,39 +13,48 @@ const createSemester: RequestHandler = async (req, res) => {
       .status(200)
       .send(successResponse(result, "Semester Create Successfully done"));
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const getOneSemester: RequestHandler = async (req, res) => {
+const getOneSemester: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.semesterId;
     const result: any = await semesterService.getOneSemesterDataDB(id);
-    if (result?.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
+
     res.status(200).send(successResponse(result, "Find Success"));
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const updateSemesterData: RequestHandler = async (req, res) => {
+const updateSemesterData: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.semesterId;
     const updateBody = req.body;
 
     const result: any = await semesterService.updateSemesterDB(id, updateBody);
-    if (result?.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
+
     res.status(200).send(successResponse(result, "Update Successfully done"));
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
+  }
+};
+
+const findAllSemester: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await semesterService.findAllDB(req.query);
+    return res
+      .status(200)
+      .send(successResponse(result, "Data Find Successfully done"));
+  } catch (error) {
+    next(error);
   }
 };
 
 export const semesterController = {
   createSemester,
-  getOneSemester,updateSemesterData
+  getOneSemester,
+  updateSemesterData,
+  findAllSemester,
 };
