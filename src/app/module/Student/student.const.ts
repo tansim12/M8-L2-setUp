@@ -1,0 +1,1 @@
+export const studentSearchAbleFields :string[]= ["name.firstName", "email", "gender"];

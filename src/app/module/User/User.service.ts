@@ -11,10 +11,7 @@ import httpStatus from "http-status";
 const userPostDataDB = async (studentData: Student, password: string) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
   if (isExist) {
-    return {
-      success: false,
-      message: "user already exist",
-    };
+   throw new AppError(400, '"user already exist"')
   } else {
     let userData: Partial<TUser> = {};
     userData.password = password || "565896322";
