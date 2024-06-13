@@ -69,7 +69,17 @@ const allStudents = async (queryParams: Record<string, unknown>) => {
   // }
   // const fieldsSelect = await paginationQuery.select(fields);
 
-  const studentQuery = new QueryBuilder(StudentModel.find(), queryParams)
+  const studentQuery = new QueryBuilder(
+    StudentModel.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "academicDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    queryParams
+  )
     .search(studentSearchAbleFields)
     .filter()
     .sort()
