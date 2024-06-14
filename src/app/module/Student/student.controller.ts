@@ -31,7 +31,7 @@ const findOneStudentData = async (
   next: NextFunction
 ) => {
   try {
-    const id: string = req.params.studentId;
+    const id: string = req.params.id;
 
     const result = await studentService.oneStudent(id);
     return res
@@ -48,11 +48,8 @@ const deleteOneData = async (
   next: NextFunction
 ) => {
   try {
-    const id = req.params.studentId;
+    const id = req.params.id;
     const result: any = await studentService.deleteById(id);
-    if (result.success === false) {
-      return res.status(404).send(errorResponse(result));
-    }
 
     res.status(200).send(successResponse(result, "student data delete"));
   } catch (error) {

@@ -97,7 +97,7 @@ const allStudents = async (queryParams: Record<string, unknown>) => {
 
 // get one student
 const oneStudent = async (id: string) => {
-  const result = await StudentModel.findOne({ id })
+  const result = await StudentModel.findById( id )
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -118,15 +118,17 @@ const deleteById = async (id: string) => {
   try {
     await session.startTransaction();
 
-    const studentDeleteResult = await StudentModel.findOneAndUpdate(
-      { id },
+    const studentDeleteResult = await StudentModel.findByIdAndUpdate(
+       id ,
       { isDelete: true },
       { new: true, session }
     );
 
+    const userId = studentDeleteResult?.user  // gets studentDeleteResult by user 
+
     if (studentDeleteResult) {
-      const deleteUserResult = await UserModel.findOneAndUpdate(
-        { id },
+      const deleteUserResult = await UserModel.findByIdAndUpdate(
+        userId,
         { isDeleted: true },
         { new: true, session }
       );

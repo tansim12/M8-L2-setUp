@@ -55,7 +55,6 @@ AcademicFacultySchema.pre("save", async function (next) {
     const isExist = await AcademicDepartmentModel.findOne({
       _id: academicDepartmentId,
     });
-
     if (isExist === null) {
       throw new AppError(404, "This Academic Department does not exist!");
     }
