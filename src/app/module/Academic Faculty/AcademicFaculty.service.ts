@@ -1,10 +1,35 @@
+import httpStatus from "http-status";
+import QueryBuilder from "../../Builder/QueryBuilder";
+import AppError from "../../Error-Handle/AppError";
 import { TAcademicFaculty } from "./AcademicFaculty.interface";
 import AcademicFacultyModel from "./AcademicFaculty.model";
+import { facultySearchableFields } from "./AcademicFaculty.const";
 
+const findAllAcademicFacultyDB = async (
+  queryParams: Partial<TAcademicFaculty>
+) => {
+  const facultyQuery = new QueryBuilder(
+    AcademicFacultyModel.find().populate({
+      path: "academicDepartment",
+      populate: {
+        path: "academicFaculty",
+      },
+    }),
+    queryParams
+  )
+    .search(facultySearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-const findAllAcademicFacultyDB = async () => {
-  const result = await AcademicFacultyModel.find();
-  return result;
+  const result = await facultyQuery.modelQuery;
+  if (result.length) {
+    return result;
+  } else {
+    throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+  }
+  // return result;
 };
 const getOneAcademicFacultyDB = async (id: string) => {
   const result = await AcademicFacultyModel.findById(id);
@@ -39,7 +64,6 @@ const updateOneAcademicFacultyDB = async (
 };
 
 export const academicFacultyService = {
-  
   getOneAcademicFacultyDB,
   findAllAcademicFacultyDB,
   updateOneAcademicFacultyDB,
