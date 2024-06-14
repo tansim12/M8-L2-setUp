@@ -48,7 +48,6 @@ const updateOneAcademicFacultyDB = async (
   const modifiedUpdateData: Record<string, unknown> = {
     ...remainingStudentData,
   };
-  console.log({modifiedUpdateData}, {payload});
   
   if (name && Object.keys(name).length) {
     for (const [key, value] of Object.entries(name)) {
