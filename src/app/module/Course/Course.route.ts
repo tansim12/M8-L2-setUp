@@ -1,22 +1,21 @@
-// import express from "express";
+import express from "express";
+import validationMiddleWare from "../../middleware/ZodSchemaValidationMiddleware";
+import { CourseZodValidations } from "./Course.zodValidation";
+import { courseController } from "./Course.controller";
 
+const router = express.Router();
 
+router.patch(
+  "/create-course",
+  validationMiddleWare(CourseZodValidations.createCourseValidationSchemaZod),
+  courseController.createCourse
+);
+router.patch(
+  "/:id",
+  validationMiddleWare(CourseZodValidations.updateCourseValidationSchemaZod),
+  courseController.updateCourse
+);
+router.get("/", courseController.findAllCourse);
+router.get("/:id", courseController.findOneCourse);
 
-// const router = express.Router();
-
-
-// router.patch(
-//   "/:id",
-//   validationMiddleWare(AcademicZodValidationSchema.UpdateAcademicFacultySchemaZod),
-//   academicFacultyController.updateAcademicFaculty
-// );
-// router.get(
-//   "/",
-//   academicFacultyController.findAllAcademicFaculty
-// );
-// router.get(
-//   "/:id",
-//   academicFacultyController.findOneAcademicFaculty
-// );
-
-// export const academicFacultyRoute = router;
+export const courseRoute = router;
