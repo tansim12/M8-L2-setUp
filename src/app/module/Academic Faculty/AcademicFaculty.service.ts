@@ -36,30 +36,41 @@ const getOneAcademicFacultyDB = async (id: string) => {
   if (result) {
     return result;
   } else {
-    return {
-      success: false,
-      message: "Not found Data",
-    };
+    throw new AppError(404, "Single Data Not found");
   }
 };
 const updateOneAcademicFacultyDB = async (
   id: string,
-  payload: TAcademicFaculty
+  payload: Partial<TAcademicFaculty>
 ) => {
+  const { address, name, ...remainingStudentData } = payload;
+
+  const modifiedUpdateData: Record<string, unknown> = {
+    ...remainingStudentData,
+  };
+  console.log({modifiedUpdateData}, {payload});
+  
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdateData[`name.${key}`] = value;
+    }
+  }
+
+  if (address && Object.keys(address).length) {
+    for (const [key, value] of Object.entries(address)) {
+      modifiedUpdateData[`address.${key}`] = value;
+    }
+  }
   const result = await AcademicFacultyModel.findByIdAndUpdate(
     id,
-    {
-      $set: { ...payload },
-    },
-    { new: true }
+    modifiedUpdateData
   );
+ 
+  
   if (result) {
     return result;
   } else {
-    return {
-      success: false,
-      message: "Not found Data",
-    };
+    throw new AppError(httpStatus.NOT_FOUND, "Data Not found");
   }
 };
 

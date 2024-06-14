@@ -71,8 +71,8 @@ const UpdateNameSchemaZod = z.object({
 const UpdateAcademicFacultySchemaZod = z.object({
   body: z.object({
     faculty: z.object({
-      name: UpdateNameSchemaZod,
-      email: z.string().email({ message: "Invalid email address" }),
+      name: UpdateNameSchemaZod.optional(),
+      email: z.string().email({ message: "Invalid email address" }).optional(),
       designation: z.string().optional(),
       age: z
         .number()

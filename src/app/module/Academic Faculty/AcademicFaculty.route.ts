@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 router.patch(
-  "/:facultyId",
+  "/:id",
   validationMiddleWare(AcademicZodValidationSchema.UpdateAcademicFacultySchemaZod),
   academicFacultyController.updateAcademicFaculty
 );
@@ -17,7 +17,7 @@ router.get(
   academicFacultyController.findAllAcademicFaculty
 );
 router.get(
-  "/:facultyId",
+  "/:id",
   academicFacultyController.findOneAcademicFaculty
 );
 

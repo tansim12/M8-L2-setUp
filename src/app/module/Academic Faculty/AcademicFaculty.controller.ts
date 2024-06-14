@@ -20,42 +20,35 @@ const findAllAcademicFaculty: RequestHandler = async (req, res, next) => {
   }
 };
 
-const updateAcademicFaculty: RequestHandler = async (req, res) => {
+const updateAcademicFaculty: RequestHandler = async (req, res, next) => {
   try {
-    const payload = req.body;
-    const id = req.params.facultyId;
-    const result: any = await academicFacultyService.updateOneAcademicFacultyDB(
+    const payload = req.body.faculty;
+    const id = req.params.id;
+
+    const result = await academicFacultyService.updateOneAcademicFacultyDB(
       id,
       payload
     );
-    if (result.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
-
     res
       .status(200)
       .send(
-        successResponse(result, "Academic Faculty Created Successfully done")
+        successResponse(result, "Academic Faculty Update Successfully done")
       );
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
-const findOneAcademicFaculty: RequestHandler = async (req, res) => {
+const findOneAcademicFaculty: RequestHandler = async (req, res, next) => {
   try {
-    const id = req.params.facultyId;
+    const id = req.params.id;
     const result: any =
       await academicFacultyService.getOneAcademicFacultyDB(id);
-    if (result.success === false) {
-      return res.status(202).send(errorResponse(result));
-    }
-
     res
       .status(200)
       .send(successResponse(result, "Academic Faculty Get Successfully done"));
   } catch (error) {
-    res.status(500).send(errorResponse(error));
+    next(error);
   }
 };
 
