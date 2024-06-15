@@ -29,7 +29,7 @@ const findAllCourse: RequestHandler = async (req, res, next) => {
 
 const updateCourse: RequestHandler = async (req, res, next) => {
   try {
-    const payload = req.body.faculty;
+    const payload = req.body;
     const id = req.params.id;
 
     const result = await courseService.updateOneCourseDB(id, payload);

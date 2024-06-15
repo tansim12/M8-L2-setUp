@@ -15,8 +15,7 @@ const createCourseDB = async (payload: TCourse) => {
 };
 const findAllCourseDB = async (queryParams: Partial<TCourse>) => {
   const courseQuery = new QueryBuilder(
-    CourseModel.find()
-    .populate('preRequisiteCourses.course'),
+    CourseModel.find().populate("preRequisiteCourses.course"),
     queryParams
   )
     .search(courseSearchableFields)
@@ -32,7 +31,9 @@ const findAllCourseDB = async (queryParams: Partial<TCourse>) => {
   }
 };
 const findOneCourseDB = async (id: string) => {
-  const result = await CourseModel.findById(id).populate('preRequisiteCourses.course');
+  const result = await CourseModel.findById(id).populate(
+    "preRequisiteCourses.course"
+  );
   if (result) {
     return result;
   } else {
@@ -40,8 +41,16 @@ const findOneCourseDB = async (id: string) => {
   }
 };
 const updateOneCourseDB = async (id: string, payload: Partial<TCourse>) => {
-  const result = await CourseModel.findByIdAndUpdate(id, payload, {
+  console.log({payload}, {id});
+  
+const {preRequisiteCourses, ...courseRemaining}=payload
+console.log(courseRemaining);
+
+
+
+  const result = await CourseModel.findByIdAndUpdate(id, courseRemaining, {
     new: true,
+    runValidators: true,
   });
   if (result) {
     return result;
