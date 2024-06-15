@@ -1,0 +1,1 @@
+export const courseSearchableFields :string[]=["code", "prefix", "title"]

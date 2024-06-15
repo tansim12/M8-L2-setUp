@@ -5,7 +5,7 @@ import { courseController } from "./Course.controller";
 
 const router = express.Router();
 
-router.patch(
+router.post(
   "/create-course",
   validationMiddleWare(CourseZodValidations.createCourseValidationSchemaZod),
   courseController.createCourse

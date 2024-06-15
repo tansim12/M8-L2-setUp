@@ -2,6 +2,8 @@ import httpStatus from "http-status";
 import AppError from "../../Error-Handle/AppError";
 import { TCourse } from "./Course.interface";
 import { CourseModel } from "./Course.mode";
+import QueryBuilder from "../../Builder/QueryBuilder";
+import { courseSearchableFields } from "./Course.const";
 
 const createCourseDB = async (payload: TCourse) => {
   const result = await CourseModel.create(payload);
@@ -12,7 +14,17 @@ const createCourseDB = async (payload: TCourse) => {
   }
 };
 const findAllCourseDB = async (queryParams: Partial<TCourse>) => {
-  const result = await CourseModel.find();
+  const courseQuery = new QueryBuilder(
+    CourseModel.find()
+    .populate('preRequisiteCourses.course'),
+    queryParams
+  )
+    .search(courseSearchableFields)
+    .filter()
+    .paginate()
+    .fields()
+    .sort();
+  const result = await courseQuery.modelQuery;
   if (result.length) {
     return result;
   } else {
@@ -20,7 +32,7 @@ const findAllCourseDB = async (queryParams: Partial<TCourse>) => {
   }
 };
 const findOneCourseDB = async (id: string) => {
-  const result = await CourseModel.findById(id);
+  const result = await CourseModel.findById(id).populate('preRequisiteCourses.course');
   if (result) {
     return result;
   } else {
