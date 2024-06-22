@@ -16,6 +16,8 @@ const createCourse: RequestHandler = async (req, res, next) => {
 };
 const findAllCourse: RequestHandler = async (req, res, next) => {
   try {
+    console.log(req.query);
+    
     const result = await courseService.findAllCourseDB(req.query);
     if (result) {
       return res
