@@ -28,7 +28,7 @@ router.put(
   courseController.assignFaculty
 );
 router.delete(
-  "/:courseId/delete-faculty",
+  "/:courseId/remove-faculty",
   validationMiddleWare(
     CourseZodValidations.facultiesWithCourseValidationSchemaZod
   ),
