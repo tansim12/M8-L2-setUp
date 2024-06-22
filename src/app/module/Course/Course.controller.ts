@@ -17,7 +17,7 @@ const createCourse: RequestHandler = async (req, res, next) => {
 const findAllCourse: RequestHandler = async (req, res, next) => {
   try {
     console.log(req.query);
-    
+
     const result = await courseService.findAllCourseDB(req.query);
     if (result) {
       return res
@@ -66,9 +66,36 @@ const deleteCourse: RequestHandler = async (req, res, next) => {
   }
 };
 
+const assignFaculty: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.courseId;
+    const payload = req.body;
+    const result = await courseService.createFacultyCoursesDB(id, payload);
+    res
+      .status(200)
+      .send(successResponse(result, "Faculty Create Successfully done "));
+  } catch (error) {
+    next(error);
+  }
+};
+const deleteFacultyCourses: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.courseId;
+    const payload = req.body;
+    const result = await courseService.deleteFacultyCoursesDB(id, payload);
+    res
+      .status(200)
+      .send(successResponse(result, "Faculty Deleted Successfully done "));
+  } catch (error) {
+    next(error);
+  }
+};
 export const courseController = {
   findAllCourse,
   updateCourse,
   findOneCourse,
-  deleteCourse,createCourse
+  deleteCourse,
+  createCourse,
+  assignFaculty,
+  deleteFacultyCourses,
 };

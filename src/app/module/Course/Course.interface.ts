@@ -13,3 +13,8 @@ export interface TCourse {
   preRequisiteCourses: [TPreRequisiteCourses];
   isDelete: boolean;
 }
+
+export interface TFacultyCourses {
+  course: Types.ObjectId;
+  faculties: [Types.ObjectId];
+}

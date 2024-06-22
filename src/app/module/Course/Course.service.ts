@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import AppError from "../../Error-Handle/AppError";
-import { TCourse } from "./Course.interface";
-import { CourseModel } from "./Course.mode";
+import { TCourse, TFacultyCourses } from "./Course.interface";
+import { CourseModel, FacultyCoursesModel } from "./Course.mode";
 import QueryBuilder from "../../Builder/QueryBuilder";
 import { courseSearchableFields } from "./Course.const";
 import mongoose from "mongoose";
@@ -139,10 +139,49 @@ const deleteOneCourseDB = async (id: string) => {
   }
 };
 
+const createFacultyCoursesDB = async (
+  id: string,
+  payload: Partial<TFacultyCourses>
+) => {
+  console.log({ payload }, { id });
+
+  const result = await FacultyCoursesModel.findByIdAndUpdate(
+    id,
+    {
+      course: id,
+      $addToSet: { faculties: { $each: payload.faculties } },
+    },
+    {
+      new: true,
+      upsert: true,
+    }
+  );
+  if (result) {
+    return result;
+  } else {
+    throw new AppError(400, "Faculty Courses Create Failed");
+  }
+};
+
+const deleteFacultyCoursesDB = async (
+  id: string,
+  payload: Partial<TFacultyCourses>
+) => {
+  const result = await FacultyCoursesModel.findByIdAndUpdate(id, {
+    $pull: { faculties: { $in: payload.faculties } },
+  });
+  if (result) {
+    return result;
+  } else {
+    throw new AppError(400, "Faculty Course Delete Something went wrong");
+  }
+};
+
 export const courseService = {
   deleteOneCourseDB,
   updateOneCourseDB,
   findOneCourseDB,
   findAllCourseDB,
   createCourseDB,
+  createFacultyCoursesDB,deleteFacultyCoursesDB
 };

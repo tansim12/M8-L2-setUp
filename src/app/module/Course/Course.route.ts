@@ -19,4 +19,20 @@ router.get("/", courseController.findAllCourse);
 router.get("/:id", courseController.findOneCourse);
 router.delete("/:id", courseController.deleteCourse);
 
+// faculties courses
+router.put(
+  "/:courseId/assign-faculty",
+  validationMiddleWare(
+    CourseZodValidations.facultiesWithCourseValidationSchemaZod
+  ),
+  courseController.assignFaculty
+);
+router.delete(
+  "/:courseId/delete-faculty",
+  validationMiddleWare(
+    CourseZodValidations.facultiesWithCourseValidationSchemaZod
+  ),
+  courseController.deleteFacultyCourses
+);
+
 export const courseRoute = router;
