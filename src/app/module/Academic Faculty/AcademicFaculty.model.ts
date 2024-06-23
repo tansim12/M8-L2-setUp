@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { TAcademicFaculty, TAddress, TName } from "./AcademicFaculty.interface";
-import { NextFunction } from "express";
 import AppError from "../../Error-Handle/AppError";
 import AcademicDepartmentModel from "../Academic Department/AcademicDepartment.model";
 

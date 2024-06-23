@@ -23,7 +23,7 @@ const AcademicDepartmentSchema = new Schema<TAcademicDepartment>(
 
 
 // when i save academic department , then checking name isExists
-AcademicDepartmentSchema.pre("save", async function (next: Function) {
+AcademicDepartmentSchema.pre("save", async function (next) {
   const isExists = await AcademicDepartmentModel.findOne({
     name: this.name,
   });
@@ -37,7 +37,7 @@ AcademicDepartmentSchema.pre("save", async function (next: Function) {
 // when i update academic department , then checking id isExists
 AcademicDepartmentSchema.pre(
   "findOneAndUpdate",
-  async function (next: Function) {
+  async function (next) {
     const query = this.getQuery(); // 'this' refers to the query itself in pre hooks for 'findOne'
     const isExists = await AcademicDepartmentModel.findOne(query);
     if (!isExists) {

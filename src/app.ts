@@ -9,6 +9,7 @@ import { academicDepartmentRoute } from "./app/module/Academic Department/Academ
 import { courseRoute } from "./app/module/Course/Course.route";
 import { semesterRegistrationRoutes } from "./app/module/SemisterRegistration/SemisterRegistration.route";
 import { FacultyRoutes } from "./app/module/Faculty/Faculty.route";
+import { offeredCourseRoutes } from "./app/module/OfferedCourse/OfferedCourse.route";
 
 const app: Application = express();
 normalMiddleware(app);
@@ -21,6 +22,7 @@ app.use("/api/v1/academic-faculty", academicFacultyRoute);
 app.use("/api/v1/academic-department", academicDepartmentRoute);
 app.use("/api/v1/courses", courseRoute);
 app.use("/api/v1/semester-registrations", semesterRegistrationRoutes);
+app.use("/api/v1/offered-course", offeredCourseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Level-2 setup ");
