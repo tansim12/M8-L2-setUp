@@ -8,6 +8,7 @@ import { academicFacultyRoute } from "./app/module/Academic Faculty/AcademicFacu
 import { academicDepartmentRoute } from "./app/module/Academic Department/AcademicDepartment.route";
 import { courseRoute } from "./app/module/Course/Course.route";
 import { semesterRegistrationRoutes } from "./app/module/SemisterRegistration/SemisterRegistration.route";
+import { FacultyRoutes } from "./app/module/Faculty/Faculty.route";
 
 const app: Application = express();
 normalMiddleware(app);
@@ -15,6 +16,7 @@ normalMiddleware(app);
 app.use("/api/v1/students/", studentRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/academic-semester", academicSemester);
+app.use("/api/v1/faculty", FacultyRoutes);
 app.use("/api/v1/academic-faculty", academicFacultyRoute);
 app.use("/api/v1/academic-department", academicDepartmentRoute);
 app.use("/api/v1/courses", courseRoute);

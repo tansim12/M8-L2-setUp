@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import {
-  errorResponse,
+  
   successResponse,
 } from "../../Re-useable/CustomResponse";
 import { academicFacultyService } from "./AcademicFaculty.service";
@@ -42,7 +42,7 @@ const updateAcademicFaculty: RequestHandler = async (req, res, next) => {
 const findOneAcademicFaculty: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result: any =
+    const result =
       await academicFacultyService.getOneAcademicFacultyDB(id);
     res
       .status(200)
