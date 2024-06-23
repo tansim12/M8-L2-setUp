@@ -1,3 +1,4 @@
+import httpStatus from "http-status";
 import QueryBuilder from "../../Builder/QueryBuilder";
 import AppError from "../../Error-Handle/AppError";
 import SemesterModel from "../Semester/Semester.model";
@@ -7,6 +8,22 @@ import { SemesterRegistrationModel } from "./SemisterRegistration.model";
 const createSemesterRegistrationDB = async (
   payload: Partial<TSemesterRegistration>
 ) => {
+  // existsAcademicSemester validation
+  const existsAcademicSemester = await SemesterModel.findById(
+    payload?.academicSemester
+  );
+  if (!existsAcademicSemester) {
+    throw new AppError(404, "Academic Semester dose not exist !");
+  }
+  // isSemesterRegistrationExists validation 
+  const isSemesterRegistrationExists = await SemesterRegistrationModel.findOne({
+    academicSemester: payload.academicSemester,
+  });
+
+  if (isSemesterRegistrationExists) {
+    throw new AppError(httpStatus.CONFLICT, "This Semester Already Registered ..")
+  }
+
   const result = await SemesterRegistrationModel.create(payload);
   if (result) {
     return result;
@@ -19,7 +36,7 @@ const findAllSemesterRegistrationDB = async (
   queryParams: Partial<TSemesterRegistration>
 ) => {
   const querySemesterRegistration = new QueryBuilder(
-    SemesterRegistrationModel.find(),
+    SemesterRegistrationModel.find().populate("academicSemester"),
     queryParams
   )
     .filter()
@@ -34,12 +51,12 @@ const findAllSemesterRegistrationDB = async (
   }
 };
 
-const findOneSemesterRegistrationDB = async (id:string) => {
-  const result = await SemesterModel.findById(id);
+const findOneSemesterRegistrationDB = async (id: string) => {
+  const result = await SemesterRegistrationModel.findById(id);
   if (result) {
     return result;
   } else {
-    result;
+    throw new AppError(400, "Find One Semester Registration Failed !");
   }
 };
 
