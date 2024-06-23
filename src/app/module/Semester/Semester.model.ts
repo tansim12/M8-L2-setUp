@@ -39,15 +39,15 @@ const SemesterSchema = new Schema<TSemester>(
   }
 );
 
-// SemesterSchema.pre("save", async function (next: Function) {
-//   const isExistsYearAndName = await SemesterModel.findOne({
-//     year: this.year,
-//     name: this.name,
-//   });
-//   if (isExistsYearAndName) {
-//     throw new Error("This year same semester already exists");
-//   }
-// });
+SemesterSchema.pre("save", async function () {
+  const isExistsYearAndName = await SemesterModel.findOne({
+    year: this.year,
+    name: this.name,
+  });
+  if (isExistsYearAndName) {
+    throw new Error("This year same semester already exists");
+  }
+});
 
 const SemesterModel = model<TSemester>("Semester", SemesterSchema);
 

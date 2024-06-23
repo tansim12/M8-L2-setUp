@@ -1,4 +1,4 @@
-import { string } from "joi";
+
 import { TSemester } from "../Semester/Semester.interface";
 import UserModel from "./User.model";
 
@@ -52,7 +52,6 @@ export const generateDynamicId = async (type: string) => {
   
   let currentId = (0).toString();
   const getLatestId = await facultyLatestId();
-  console.log(getLatestId);
   
   if (type  && getLatestId) {
     currentId = getLatestId as string; // 2030 01 0001

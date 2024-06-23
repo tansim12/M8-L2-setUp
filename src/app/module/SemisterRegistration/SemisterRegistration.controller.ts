@@ -50,9 +50,31 @@ const findOneSemesterRegistration: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const updateSemesterRegistration: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    const result =
+      await semesterRegistrationService.updateSemesterRegistrationDB(
+        id,
+        payload
+      );
+    res
+      .status(200)
+      .send(
+        successResponse(
+          result,
+          "One Semester Registration Updated Successfully done"
+        )
+      );
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const semesterRegistrationController = {
   createSemesterRegistration,
   findAllSemesterRegistration,
   findOneSemesterRegistration,
+  updateSemesterRegistration,
 };

@@ -15,13 +15,30 @@ const createSemesterRegistrationDB = async (
   if (!existsAcademicSemester) {
     throw new AppError(404, "Academic Semester dose not exist !");
   }
-  // isSemesterRegistrationExists validation 
+  // isSemesterRegistrationExists validation
   const isSemesterRegistrationExists = await SemesterRegistrationModel.findOne({
     academicSemester: payload.academicSemester,
   });
 
   if (isSemesterRegistrationExists) {
-    throw new AppError(httpStatus.CONFLICT, "This Semester Already Registered ..")
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "This Semester Already Registered .."
+    );
+  }
+
+  const latestStatusSemesterRegistration =
+    await SemesterRegistrationModel.findOne().sort({ createdAt: -1 });
+  if (
+    latestStatusSemesterRegistration?.status === "UPCOMING" ||
+    latestStatusSemesterRegistration?.status === ("ONGOING" as string)
+  ) {
+    console.log({ 35656565856: latestStatusSemesterRegistration?.status });
+
+    throw new AppError(
+      httpStatus.CONFLICT,
+      `Last Semester Is ${latestStatusSemesterRegistration?.status}`
+    );
   }
 
   const result = await SemesterRegistrationModel.create(payload);
@@ -52,16 +69,24 @@ const findAllSemesterRegistrationDB = async (
 };
 
 const findOneSemesterRegistrationDB = async (id: string) => {
-  const result = await SemesterRegistrationModel.findById(id);
+  const result =
+    await SemesterRegistrationModel.findById(id).populate("academicSemester");
   if (result) {
     return result;
   } else {
     throw new AppError(400, "Find One Semester Registration Failed !");
   }
 };
+const updateSemesterRegistrationDB = async (
+  id: string,
+  payload: Partial<TSemesterRegistration>
+) => {
+  console.log({ id }, { payload });
+};
 
 export const semesterRegistrationService = {
   createSemesterRegistrationDB,
   findAllSemesterRegistrationDB,
   findOneSemesterRegistrationDB,
+  updateSemesterRegistrationDB,
 };
