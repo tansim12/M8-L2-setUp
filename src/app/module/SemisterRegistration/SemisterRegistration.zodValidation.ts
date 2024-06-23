@@ -5,7 +5,7 @@ import { SemesterRegistrationStatus } from './SemisterRegistration.const';
 const createSemesterRegistrationValidationSchema = z.object({
   body: z.object({
     academicSemester: z.string(),
-    status: z.enum([...(SemesterRegistrationStatus as [string, ...string[]])]),
+    status: z.enum([...(SemesterRegistrationStatus as [string, ...string[]])]).default("UPCOMING"),
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
     minCredit: z.number(),
