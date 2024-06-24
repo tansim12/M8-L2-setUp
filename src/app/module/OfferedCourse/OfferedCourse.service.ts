@@ -56,8 +56,26 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
   if (!academicSemesterIsExists) {
     throw new AppError(404, "Academic Semester  Not found !");
   }
-const academicSemester = academicSemesterIsExists?._id
-  const result = await OfferedCourseModel.create({...payload, academicSemester});
+
+  // check academic faculty is exists belong to academicDepartment
+  const isAcademicFacultyExistsAcademicDepartment =
+    await AcademicDepartmentModel.findOne({
+      academicFaculty,
+      academicDepartment,
+    });
+
+  if (!isAcademicFacultyExistsAcademicDepartment) {
+    throw new AppError(
+      404,
+      `This ${facultyIsExists?.name} is not exists ${academicDepartmentIsExists?.name} `
+    );
+  }
+
+  const academicSemester = academicSemesterIsExists?._id;
+  const result = await OfferedCourseModel.create({
+    ...payload,
+    academicSemester,
+  });
   if (result) {
     return result;
   } else {
