@@ -23,15 +23,10 @@ router.patch(
   semesterRegistrationController.updateSemesterRegistration
 );
 
-// router.get(
-//   '/:id',
-//   SemesterRegistrationController.getSingleSemesterRegistration,
-// );
-
-// router.delete(
-//   '/:id',
-//   SemesterRegistrationController.deleteSemesterRegistration,
-// );
+router.delete(
+  "/:id",
+  semesterRegistrationController.deleteOfferedCourseAndSemesterRegistration
+);
 
 router.get("/", semesterRegistrationController.findAllSemesterRegistration);
 

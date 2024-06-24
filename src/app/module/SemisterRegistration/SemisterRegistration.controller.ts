@@ -71,10 +71,35 @@ const updateSemesterRegistration: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const deleteOfferedCourseAndSemesterRegistration: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const id = req.params.id;
+
+    const result =
+      await semesterRegistrationService.deleteOfferedCourseAndSemesterRegistrationDB(
+        id
+      );
+    res
+      .status(200)
+      .send(
+        successResponse(
+          result,
+          "Semester Registration Deleted Successfully done"
+        )
+      );
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const semesterRegistrationController = {
   createSemesterRegistration,
   findAllSemesterRegistration,
   findOneSemesterRegistration,
   updateSemesterRegistration,
+  deleteOfferedCourseAndSemesterRegistration,
 };

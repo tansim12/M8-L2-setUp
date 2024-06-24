@@ -5,6 +5,8 @@ import SemesterModel from "../Semester/Semester.model";
 import { TSemesterRegistration } from "./SemisterRegistration.interface";
 import { SemesterRegistrationModel } from "./SemisterRegistration.model";
 import { RegistrationStatus } from "./SemisterRegistration.const";
+import mongoose from "mongoose";
+import { OfferedCourseModel } from "../OfferedCourse/OfferedCourse.model";
 
 const createSemesterRegistrationDB = async (
   payload: Partial<TSemesterRegistration>
@@ -127,9 +129,58 @@ const updateSemesterRegistrationDB = async (
   }
 };
 
+const deleteOfferedCourseAndSemesterRegistrationDB = async (id: string) => {
+  const session = await mongoose.startSession();
+  try {
+    await session.startTransaction();
+
+    const isExists =
+      await SemesterRegistrationModel.findById(id).select("status");
+    if (!isExists) {
+      throw new AppError(404, "Data Not Found !");
+    }
+
+    if (isExists?.status !== RegistrationStatus.UPCOMING) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Semester Registration Current Status is ${isExists?.status}`
+      );
+    }
+
+    const deleteSemesterRegistration = await SemesterRegistrationModel.findByIdAndDelete(id)
+    if (!deleteSemesterRegistration) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "Semester Registration Delete Failed !!"
+      );
+    }
+
+    const existsOfferedCourseThisSemesterRegistrationDelete =
+      await OfferedCourseModel.deleteMany({ semesterRegistration: id });
+      if (!existsOfferedCourseThisSemesterRegistrationDelete) {
+        throw new AppError(
+          httpStatus.BAD_REQUEST,
+          "Semester Registration Delete Failed !!"
+        );
+      }
+      await session.commitTransaction()
+      await session.endSession()
+      return existsOfferedCourseThisSemesterRegistrationDelete
+
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Semester Registration Delete Failed !!"
+    );
+  }
+};
+
 export const semesterRegistrationService = {
   createSemesterRegistrationDB,
   findAllSemesterRegistrationDB,
   findOneSemesterRegistrationDB,
   updateSemesterRegistrationDB,
+  deleteOfferedCourseAndSemesterRegistrationDB,
 };
