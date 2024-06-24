@@ -41,9 +41,9 @@ const getSingleOfferedCourse: RequestHandler = async (req, res, next) => {
 
 const updateOfferedCourse: RequestHandler = async (req, res, next) => {
   try {
-    const { facultyId } = req.params;
+    const { id } = req.params;
     const result = await offeredCourseService.updateOfferedCourseDB(
-      facultyId,
+      id,
       req.body
     );
 
