@@ -1,3 +1,4 @@
+import httpStatus from "http-status";
 import QueryBuilder from "../../Builder/QueryBuilder";
 import AppError from "../../Error-Handle/AppError";
 import AcademicDepartmentModel from "../Academic Department/AcademicDepartment.model";
@@ -18,6 +19,7 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
     academicDepartment,
     academicFaculty,
     semesterRegistration,
+    section,
   } = payload;
 
   // faculty check
@@ -60,14 +62,30 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
   // check academic faculty is exists belong to academicDepartment
   const isAcademicFacultyExistsAcademicDepartment =
     await AcademicDepartmentModel.findOne({
-      academicFaculty,
-      academicDepartment,
+      academicFaculty: faculty,
+      _id: academicDepartment,
     });
 
   if (!isAcademicFacultyExistsAcademicDepartment) {
     throw new AppError(
-      404,
+      httpStatus.BAD_REQUEST,
       `This ${facultyIsExists?.name} is not exists ${academicDepartmentIsExists?.name} `
+    );
+  }
+
+  // check same section, same semester register , same course
+  const isDoubleOfferedCoursesSectionsAndRegisterSemester =
+    await OfferedCourseModel.findOne({
+      semesterRegistration,
+      course,
+      section,
+    });
+
+    
+  if (isDoubleOfferedCoursesSectionsAndRegisterSemester) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `This Offered course already  exist  `
     );
   }
 
