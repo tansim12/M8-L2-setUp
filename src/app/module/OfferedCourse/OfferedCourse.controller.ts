@@ -56,10 +56,28 @@ const updateOfferedCourse: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const deleteOfferedCourse: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await offeredCourseService.deleteOfferedCourseDB(
+      id,
+    
+    );
+
+    res
+      .status(200)
+      .send(
+        successResponse(result, "Offered Courses is Deleted successfully")
+      );
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const offeredCoursesControllers = {
   createOfferedCourse,
   getAllOfferedCourses,
   getSingleOfferedCourse,
   updateOfferedCourse,
+  deleteOfferedCourse,
 };

@@ -170,9 +170,9 @@ const updateOfferedCourseDB = async (
   }).select("days startTime endTime");
 
   const newSchedules = {
-    days: payload?.days ,
-    startTime: payload?.startTime ,
-    endTime: payload?.endTime ,
+    days: payload?.days,
+    startTime: payload?.startTime,
+    endTime: payload?.endTime,
   };
   if (hasTimeConflict(assignSchedules, newSchedules)) {
     throw new AppError(
@@ -193,7 +193,7 @@ const updateOfferedCourseDB = async (
 
   const semesterRegistrationData = await SemesterRegistrationModel.findById(
     isExists?.semesterRegistration
-  );
+  ).select("status");
   if (semesterRegistrationData?.status !== RegistrationStatus.UPCOMING) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
@@ -212,9 +212,46 @@ const updateOfferedCourseDB = async (
   }
 };
 
+const deleteOfferedCourseDB= async (id: string) => {
+
+  const isExists = await OfferedCourseModel.findById(id);
+  if (!isExists) {
+    throw new AppError(404, "Data Not Found !");
+  }
+
+    // semester registration upcoming validation
+
+    const semesterRegistrationData = await SemesterRegistrationModel.findById(
+      isExists?.semesterRegistration
+    ).select("status");
+    if (semesterRegistrationData?.status !== RegistrationStatus.UPCOMING) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Semester Registration Current Status is ${semesterRegistrationData?.status}`
+      );
+    }
+
+// delete offered courses 
+const  result = await OfferedCourseModel.findByIdAndDelete(id)
+if (result) {
+  return result
+}else{
+  throw new AppError(
+    httpStatus.BAD_REQUEST,
+    `Offered Course Delete Failed !!`
+  );
+}
+
+
+
+
+  
+};
+
 export const offeredCourseService = {
   createOfferedCourseDB,
   findAllOfferedCourseDB,
   findOneOfferedCourseDB,
   updateOfferedCourseDB,
+  deleteOfferedCourseDB,
 };
