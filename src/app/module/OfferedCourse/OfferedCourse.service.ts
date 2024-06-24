@@ -9,6 +9,7 @@ import SemesterModel from "../Semester/Semester.model";
 import { SemesterRegistrationModel } from "../SemisterRegistration/SemisterRegistration.model";
 import { TOfferedCourse } from "./OfferedCourse.interface";
 import { OfferedCourseModel } from "./OfferedCourse.model";
+import { hasTimeConflict } from "./OfferedCourse.utils";
 
 const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
   // all id check is exist DB
@@ -90,19 +91,28 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
     semesterRegistration,
     academicFaculty,
     days: { $in: days },
-  });
+  }).select("days startTime endTime");
 
   const newSchedules = {
     days,
     startTime,
     endTime,
   };
+  if (hasTimeConflict(assignSchedules, newSchedules)) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "This Faculty is not Available this time . Please choose Other time or day !!"
+    );
+  }
 
   assignSchedules.forEach((schedule) => {
     const existingStartTime = new Date(`1970-01-01T${schedule?.startTime}`);
     const existingEndTime = new Date(`1970-01-01T${schedule?.endTime}`);
     const newStartTime = new Date(`1970-01-01T${newSchedules?.startTime}`);
     const newEndTime = new Date(`1970-01-01T${newSchedules?.endTime}`);
+
+    // 8.00 - 11.00   existing
+    // 9.30 - 10.00    new
     if (newStartTime < existingEndTime && newEndTime > existingStartTime) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
