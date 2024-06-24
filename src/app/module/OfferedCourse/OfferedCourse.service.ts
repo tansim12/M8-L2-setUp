@@ -20,6 +20,9 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
     academicFaculty,
     semesterRegistration,
     section,
+    days,
+    startTime,
+    endTime,
   } = payload;
 
   // faculty check
@@ -81,7 +84,33 @@ const createOfferedCourseDB = async (payload: Partial<TOfferedCourse>) => {
       section,
     });
 
-    
+  // check time payload (startTime, EndTime) and already DB Exists  (startTime, EndTime)
+
+  const assignSchedules = await OfferedCourseModel.find({
+    semesterRegistration,
+    academicFaculty,
+    days: { $in: days },
+  });
+
+  const newSchedules = {
+    days,
+    startTime,
+    endTime,
+  };
+
+  assignSchedules.forEach((schedule) => {
+    const existingStartTime = new Date(`1970-01-01T${schedule?.startTime}`);
+    const existingEndTime = new Date(`1970-01-01T${schedule?.endTime}`);
+    const newStartTime = new Date(`1970-01-01T${newSchedules?.startTime}`);
+    const newEndTime = new Date(`1970-01-01T${newSchedules?.endTime}`);
+    if (newStartTime < existingEndTime && newEndTime > existingStartTime) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "This Faculty is not Available this time . Please choose Other time or day !!"
+      );
+    }
+  });
+
   if (isDoubleOfferedCoursesSectionsAndRegisterSemester) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
