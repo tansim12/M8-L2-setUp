@@ -15,6 +15,7 @@ const Course_route_1 = require("./app/module/Course/Course.route");
 const SemisterRegistration_route_1 = require("./app/module/SemisterRegistration/SemisterRegistration.route");
 const Faculty_route_1 = require("./app/module/Faculty/Faculty.route");
 const OfferedCourse_route_1 = require("./app/module/OfferedCourse/OfferedCourse.route");
+const Auth_route_1 = require("./app/module/Auth/Auth.route");
 const app = (0, express_1.default)();
 (0, normalMiddleware_1.default)(app);
 app.use("/api/v1/students/", student_route_1.studentRoute);
@@ -26,6 +27,7 @@ app.use("/api/v1/academic-department", AcademicDepartment_route_1.academicDepart
 app.use("/api/v1/courses", Course_route_1.courseRoute);
 app.use("/api/v1/semester-registrations", SemisterRegistration_route_1.semesterRegistrationRoutes);
 app.use("/api/v1/offered-course", OfferedCourse_route_1.offeredCourseRoutes);
+app.use("/api/v1/auth", Auth_route_1.authRoute);
 app.get("/", (req, res) => {
     res.send("Level-2 setup ");
 });
