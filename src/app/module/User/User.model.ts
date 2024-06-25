@@ -19,7 +19,7 @@ const UserSchema = new Schema<TUser>(
     },
     needsPasswordChange: { 
       type: Boolean, 
-      default: false 
+      default: true 
     },
     status: { 
       type: Number, 
@@ -41,7 +41,7 @@ const UserSchema = new Schema<TUser>(
 );
 
 // using middleware pre hook by save data   === Before
-UserSchema.pre("save", async function (next: Function) {
+UserSchema.pre("save", async function (next) {
     const userData = this;
     userData.password = await Bcrypt.hash(
       this.password,
