@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import AppError from "../Error-Handle/AppError";
 import httpStatus from "http-status";
@@ -17,14 +17,21 @@ export const authMiddleWare = () => {
         );
       }
 
-      const verifyToken = jwt.verify(
+    jwt.verify(
         token as string,
         process.env.SECRET_ACCESS_TOKEN as string,
         function (err, decoded) {
-          console.log({ decoded });
+          if (err) {
+            throw new AppError(
+              httpStatus.UNAUTHORIZED,
+              "This user is Unauthorized !!!"
+            );
+          }
+          req.user = decoded  as JwtPayload
+          next()
         }
       );
-      console.log(verifyToken);
+    
     } catch (error) {
       next(error);
     }
