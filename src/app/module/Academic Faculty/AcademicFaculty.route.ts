@@ -3,6 +3,7 @@ import validationMiddleWare from "../../middleware/ZodSchemaValidationMiddleware
 
 import { academicFacultyController } from "./AcademicFaculty.controller";
 import { AcademicZodValidationSchema } from "./AcademicFaculty.zodValidation ";
+import { authMiddleWare } from "../../middleware/AuthMiddleWare";
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.patch(
   academicFacultyController.updateAcademicFaculty
 );
 router.get(
-  "/",
+  "/", authMiddleWare(),
   academicFacultyController.findAllAcademicFaculty
 );
 router.get(
