@@ -10,16 +10,16 @@ const login: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
-// const changePassword: RequestHandler = async (req, res, next) => {
-//   try {
-//     const result = await authService.changePasswordDB(req?.user?.id, req.body);
-//     res.status(200).send(successResponse(result, "Password Change Successfully done "));
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const changePassword: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await authService.changePasswordDB(req?.user?.id, req.body);
+    res.status(200).send(successResponse(result, "Password Change Successfully done "));
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const authController = {
   login,
-  // changePassword,
+  changePassword,
 };

@@ -12,11 +12,11 @@ router.post(
   validationMiddleWare(AuthZodValidation.loginValidationSchemaZod),
   authController.login
 );
-// router.post(
-//   "/password-change",
-//   authMiddleWare(USER_ROLE.student, USER_ROLE.admin, USER_ROLE.faculty),
-//   validationMiddleWare(AuthZodValidation.changePasswordValidationSchemaZod),
-//   authController.changePassword
-// );
+router.post(
+  "/password-change",
+  authMiddleWare(USER_ROLE.student, USER_ROLE.admin, USER_ROLE.faculty),
+  validationMiddleWare(AuthZodValidation.changePasswordValidationSchemaZod),
+  authController.changePassword
+);
 
 export const authRoute = router;
