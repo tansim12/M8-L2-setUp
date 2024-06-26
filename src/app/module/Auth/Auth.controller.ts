@@ -34,9 +34,7 @@ const changePassword: RequestHandler = async (req, res, next) => {
 };
 const refreshToken: RequestHandler = async (req, res, next) => {
   try { 
-    const result = await authService.refreshTokenDB(req?.cookies.refreshToken);
-    console.log(result);
-    
+    const result = await authService.refreshTokenDB(req?.cookies.refreshToken);  
     res
       .status(200)
       .send(successResponse(result, "Refresh Token send Successfully done "));
