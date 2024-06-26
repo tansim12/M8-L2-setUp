@@ -3,10 +3,10 @@ import AppError from "../../Error-Handle/AppError";
 import UserModel from "../User/User.model";
 import { TChangePassword, TLoginUser } from "./Auth.interface";
 import { validateLoginPassword } from "../../Re-useable/BcryptValidatin";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 import Bcrypt from "bcrypt";
+import { dynamicTokenGenerate } from "./Auth.utils";
 
 const loginDB = async (payload: TLoginUser) => {
   const { id, password } = payload;
@@ -38,15 +38,22 @@ const loginDB = async (payload: TLoginUser) => {
     id: user?.id,
     role: user?.role,
   };
-  const accessToken = jwt.sign(
-    {
-      data: jwtPayload,
-    },
+  const accessToken = dynamicTokenGenerate(
+    jwtPayload,
     process.env.SECRET_ACCESS_TOKEN as string,
-    { expiresIn: "10d" }
+    process.env.SECRET_ACCESS_TOKEN_TIME as string
+  );
+  const refreshToken = dynamicTokenGenerate(
+    jwtPayload,
+    process.env.SECRET_REFRESH_TOKEN as string,
+    process.env.SECRET_REFRESH_TOKEN_TIME as string
   );
 
-  return { accessToken, needsPasswordChange: user?.needsPasswordChange };
+  return {
+    accessToken,
+    needsPasswordChange: user?.needsPasswordChange,
+    refreshToken,
+  };
 };
 
 const changePasswordDB = async (id: string, payload: TChangePassword) => {
@@ -92,11 +99,14 @@ const changePasswordDB = async (id: string, payload: TChangePassword) => {
     throw new AppError(400, "Password Not Change here");
   }
 
-  const result = await UserModel.findOneAndUpdate({id}, {
-    needsPasswordChange: false,
-    password: newPasswordBcrypt,
-    passwordChangeAt:new Date()
-  });
+  const result = await UserModel.findOneAndUpdate(
+    { id },
+    {
+      needsPasswordChange: false,
+      password: newPasswordBcrypt,
+      passwordChangeAt: new Date(),
+    }
+  );
   if (result) {
     return null;
   } else {
