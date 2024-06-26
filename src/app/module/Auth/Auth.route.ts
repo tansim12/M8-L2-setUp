@@ -18,5 +18,10 @@ router.post(
   validationMiddleWare(AuthZodValidation.changePasswordValidationSchemaZod),
   authController.changePassword
 );
+router.post(
+  "/refresh-token",
+  validationMiddleWare(AuthZodValidation.refreshTokenValidationSchemaZod),
+  authController.refreshToken
+);
 
 export const authRoute = router;

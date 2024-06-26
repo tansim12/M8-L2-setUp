@@ -6,12 +6,13 @@ const validationMiddleWare = (zodSchema: AnyZodObject) => {
     try {
       await zodSchema.parseAsync({
         body: req.body,
+        cookies:req.cookies
       });
 
       next();
     } catch (error) {
-     next(error)
+      next(error);
     }
   };
 };
-export default validationMiddleWare
+export default validationMiddleWare;

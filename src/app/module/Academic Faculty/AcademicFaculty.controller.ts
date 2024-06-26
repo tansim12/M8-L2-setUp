@@ -6,7 +6,7 @@ import {
 import { academicFacultyService } from "./AcademicFaculty.service";
 
 const findAllAcademicFaculty: RequestHandler = async (req, res, next) => {
-  try {  
+  try {     
     const result = await academicFacultyService.findAllAcademicFacultyDB(
       req.query
     );

@@ -32,7 +32,7 @@ export const authMiddleWare = (...requiredRoles: TUserRole[]) => {
           }
           // validation is exists
           const { role, id } = (decoded as JwtPayload).data;
-          // const { iat} = (decoded as JwtPayload);
+          const { iat } = decoded as JwtPayload;
 
           const user = await UserModel.findOne({ id }).select("+password");
           if (!user) {
@@ -54,6 +54,16 @@ export const authMiddleWare = (...requiredRoles: TUserRole[]) => {
             throw new AppError(httpStatus.NOT_FOUND, "This User Blocked !");
           }
 
+          const passwordChangeConvertMilliSecond =
+            new Date(user?.passwordChangeAt as Date).getTime() / 1000;
+          const jwtIssueTime = iat as number;
+
+          if (passwordChangeConvertMilliSecond > jwtIssueTime) {
+            throw new AppError(
+              httpStatus.UNAUTHORIZED,
+              "You are not authorized !"
+            );
+          }
           // check who access this section
           if (requiredRoles && !requiredRoles.includes(role)) {
             throw new AppError(

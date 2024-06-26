@@ -25,7 +25,21 @@ const login: RequestHandler = async (req, res, next) => {
 const changePassword: RequestHandler = async (req, res, next) => {
   try {
     const result = await authService.changePasswordDB(req?.user?.id, req.body);
-    res.status(200).send(successResponse(result, "Password Change Successfully done "));
+    res
+      .status(200)
+      .send(successResponse(result, "Password Change Successfully done "));
+  } catch (error) {
+    next(error);
+  }
+};
+const refreshToken: RequestHandler = async (req, res, next) => {
+  try { 
+    const result = await authService.refreshTokenDB(req?.cookies.refreshToken);
+    console.log(result);
+    
+    res
+      .status(200)
+      .send(successResponse(result, "Refresh Token send Successfully done "));
   } catch (error) {
     next(error);
   }
@@ -34,4 +48,5 @@ const changePassword: RequestHandler = async (req, res, next) => {
 export const authController = {
   login,
   changePassword,
+  refreshToken,
 };
