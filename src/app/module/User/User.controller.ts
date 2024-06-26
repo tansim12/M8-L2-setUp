@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from "express";
 import {
-  errorResponse,
   successResponse,
 } from "../../Re-useable/CustomResponse";
 import { userService } from "./User.service";
@@ -39,8 +38,22 @@ const createFaculty = async (
     next(error);
   }
 };
+const createAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const admin = req.body.admin;
+    const password = req.body.password;
+
+    const result = await userService.createAdminDB(admin, password);
+    res
+      .status(200)
+      .send(successResponse(result, "User Create Successfully done"));
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const userController = {
   createStudent,
   createFaculty,
+  createAdmin,
 };

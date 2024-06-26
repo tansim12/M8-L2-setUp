@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
+
 import { z } from "zod";
 
-const ObjectId = mongoose.Types.ObjectId;
 
 // Address validation schema
 const AddressSchema = z.object({

@@ -9,6 +9,7 @@ import AppError from "../../Error-Handle/AppError";
 import httpStatus from "http-status";
 import { TAcademicFaculty } from "../Academic Faculty/AcademicFaculty.interface";
 import AcademicFacultyModel from "../Academic Faculty/AcademicFaculty.model";
+import { AdminModel2 } from "../Admin/Admin.model";
 
 const createStudentDB = async (studentData: Student, password: string) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
@@ -70,42 +71,77 @@ const createAcademicFacultyDB = async (
   payload: Partial<TAcademicFaculty>,
   password: string
 ) => {
-  const type :string = "faculty"
+  const type: string = "faculty";
   const session = await mongoose.startSession();
   let userData: Partial<TUser> = {};
   userData.password = password || "565896322";
   userData.id = await generateDynamicId(type);
   userData.role = "faculty";
 
- 
+  try {
+    session.startTransaction();
+    const userResult = await UserModel.create([userData], { session });
+    if (userResult.length) {
+      payload.id = userResult[0]?.id;
+      payload.user = userResult[0]?._id;
+
+      const facultyResult = await AcademicFacultyModel.create([payload], {
+        session,
+      });
+
+      if (!facultyResult.length) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Faulty Create Failed");
+      }
+      await session.commitTransaction();
+      await session.endSession();
+      return facultyResult;
+    } else {
+      throw new AppError(httpStatus.BAD_REQUEST, "User Create Failed");
+    }
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.BAD_REQUEST, "Faculty Create Failed2");
+  }
+};
+
+const createAdminDB = async (
+  payload: Partial<TAcademicFaculty>,
+  password: string
+) => {
+  const type: string = "admin";
+  const session = await mongoose.startSession();
+  let userData: Partial<TUser> = {};
+  userData.password = password || "admin12";
+  userData.id = await generateDynamicId(type);
+  userData.role = "admin";
 
   try {
-     session.startTransaction()
-     const userResult = await UserModel.create([userData], { session }); 
-     if (userResult.length) {
-      payload.id = userResult[0]?.id
-      payload.user = userResult[0]?._id
+    session.startTransaction();
+    const userResult = await UserModel.create([userData], { session });
+    if (userResult.length) {
+      payload.id = userResult[0]?.id;
+      payload.user = userResult[0]?._id;
 
-      const facultyResult   = await AcademicFacultyModel.create([payload], {session})
-    
-      
-      if (!facultyResult.length) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Faulty Create Failed")
+      const adminResult = await AdminModel2.create([payload], { session });
+
+      if (!adminResult.length) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Admin Create Failed");
       }
-      await session.commitTransaction()
-      await session.endSession()
-      return facultyResult
-     }else{
-      throw new AppError(httpStatus.BAD_REQUEST, "User Create Failed")
-     }
+      await session.commitTransaction();
+      await session.endSession();
+      return adminResult;
+    } else {
+      throw new AppError(httpStatus.BAD_REQUEST, "User Create Failed");
+    }
   } catch (error) {
-    await session.abortTransaction()
-    await session.endSession()
-    throw new AppError(httpStatus.BAD_REQUEST, "Faculty Create Failed2");
-    
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.BAD_REQUEST, "Admin Create Failed2");
   }
 };
 export const userService = {
   createStudentDB,
   createAcademicFacultyDB,
+  createAdminDB,
 };
