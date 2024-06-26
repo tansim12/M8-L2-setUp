@@ -95,9 +95,10 @@ const changePasswordDB = async (id: string, payload: TChangePassword) => {
   const result = await UserModel.findOneAndUpdate({id}, {
     needsPasswordChange: false,
     password: newPasswordBcrypt,
+    passwordChangeAt:new Date()
   });
   if (result) {
-    return result;
+    return null;
   } else {
     throw new AppError(400, "Password Not Change here");
   }

@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import dotenv from "dotenv";
 import Bcrypt from "bcrypt";
 import { TUser } from "./User.interface";
+
 dotenv.config();
 
 const UserSchema = new Schema<TUser>(
@@ -21,6 +22,10 @@ const UserSchema = new Schema<TUser>(
     needsPasswordChange: {
       type: Boolean,
       default: true,
+    },
+   passwordChangeAt: {
+      type: Date,
+      optional:true
     },
     status: {
       type: Number,
