@@ -163,7 +163,7 @@ const refreshTokenDB = async (token: string) => {
   };
   const accessToken = dynamicTokenGenerate(
     jwtPayload,
-    process.env.SECRET_REFRESH_TOKEN as string,
+    process.env.SECRET_ACCESS_TOKEN as string,
     process.env.SECRET_ACCESS_TOKEN_TIME as string
   );
 
