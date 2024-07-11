@@ -167,7 +167,7 @@ const refreshTokenDB = async (token: string) => {
     process.env.SECRET_ACCESS_TOKEN_TIME as string
   );
 
-  return accessToken;
+  return {accessToken};
 };
 
 export const authService = {
