@@ -8,15 +8,17 @@ const createAcademicDepartmentDB = async (payload: TAcademicDepartment) => {
   return result;
 };
 const findAllAcademicDepartmentDB = async () => {
-  const result = await AcademicDepartmentModel.find().populate("academicFaculty");
+  const result =
+    await AcademicDepartmentModel.find().populate("academicFaculty");
   return result;
 };
 const getOneAcademicDepartmentDB = async (id: string) => {
-  const result = await AcademicDepartmentModel.findById(id).populate("academicFaculty");
+  const result =
+    await AcademicDepartmentModel.findById(id).populate("academicFaculty");
   if (result) {
     return result;
   } else {
-    throw new AppError(httpStatus.NOT_FOUND, "Not found data")
+    throw new AppError(httpStatus.NOT_FOUND, "Not found data");
   }
 };
 const updateOneAcademicDepartmentDB = async (
@@ -33,7 +35,7 @@ const updateOneAcademicDepartmentDB = async (
   if (result) {
     return result;
   } else {
-    throw new AppError(httpStatus.NOT_FOUND, "Not Found")
+    throw new AppError(httpStatus.NOT_FOUND, "Not Found");
   }
 };
 
