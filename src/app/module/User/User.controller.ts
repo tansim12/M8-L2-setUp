@@ -1,7 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import {
-  successResponse,
-} from "../../Re-useable/CustomResponse";
+import { successResponse } from "../../Re-useable/CustomResponse";
 import { userService } from "./User.service";
 
 const createStudent = async (
@@ -13,7 +11,11 @@ const createStudent = async (
     const student = req.body.student;
     const password = req.body.password;
 
-    const result = await userService.createStudentDB(student, password);
+    const result = await userService.createStudentDB(
+      req?.file,
+      student,
+      password
+    );
     res
       .status(200)
       .send(successResponse(result, "User Create Successfully done"));

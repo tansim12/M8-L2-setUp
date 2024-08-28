@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TUser } from "./User.interface";
 import UserModel from "./User.model";
 import StudentModel from "../Student/Student.modal";
@@ -10,8 +11,13 @@ import httpStatus from "http-status";
 import { TAcademicFaculty } from "../Academic Faculty/AcademicFaculty.interface";
 import AcademicFacultyModel from "../Academic Faculty/AcademicFaculty.model";
 import { AdminModel2 } from "../Admin/Admin.model";
+import { sendImageCloudinary } from "../../Utils/sendImageCloudinary";
 
-const createStudentDB = async (studentData: Student, password: string) => {
+const createStudentDB = async (
+  file: any,
+  studentData: Student,
+  password: string
+) => {
   const isExist = await StudentModel.findOne({ email: studentData.email });
   if (isExist) {
     throw new AppError(400, '"user already exist"');
@@ -36,12 +42,18 @@ const createStudentDB = async (studentData: Student, password: string) => {
         userData.role = "student";
       }
 
+      const filePath = file?.path;
+      const name = `${userData?.id} ${studentData?.name?.firstName}`;
+      // image hosting
+      const profileImg = await sendImageCloudinary(name, filePath);
+     
       // create a user   operation write -1
       const userResult = await UserModel.create([userData], { session });
 
       if (userResult.length) {
         studentData.id = userResult[0].id;
         studentData.user = userResult[0]._id;
+        studentData.profileImg = profileImg;
         // create a student operation write -2
         const studentResult = await StudentModel.create([studentData], {
           session,

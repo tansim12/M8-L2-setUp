@@ -6,11 +6,16 @@ import { AcademicZodValidationSchema } from "../Academic Faculty/AcademicFaculty
 import { AdminZodValidations } from "../Admin/Admin.zodValidation";
 import { authMiddleWare } from "../../middleware/AuthMiddleWare";
 import { USER_ROLE } from "./User.const";
+import { upload } from "../../Utils/sendImageCloudinary";
+import { jsonDataSetMiddleware } from "../../middleware/jsonDataSetMiddleware";
 
 const router = express.Router();
 
 router.post(
-  "/create-student", authMiddleWare(USER_ROLE.admin),
+  "/create-student",
+  authMiddleWare(USER_ROLE.admin),
+  upload.single("file"),
+  jsonDataSetMiddleware,
   validationMiddleWare(studentSchemaZod.CreateStudentSchemaZod),
   userController.createStudent
 );
@@ -24,9 +29,7 @@ router.post(
 );
 router.post(
   "/create-admin",
-  validationMiddleWare(
-    AdminZodValidations.createAdminValidationSchemaZod
-  ),
+  validationMiddleWare(AdminZodValidations.createAdminValidationSchemaZod),
   userController.createAdmin
 );
 

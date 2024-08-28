@@ -67,7 +67,7 @@ const CreateStudentSchemaZod = z.object({
         message: "Gender is required",
       }),
       address: AddressSchema,
-      profileImg: z.string().nonempty({ message: "Profile image is required" }),
+      profileImg: z.string().nonempty({ message: "Profile image is required" }).optional(),
       guardian: GuardianSchema,
       blood: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
         message: "Blood type is required",
@@ -162,10 +162,10 @@ const UpdateStudentSchemaZod = z.object({
             })
             .optional(),
           address: UpdateAddressSchema,
-          profileImg: z
-            .string()
-            .nonempty({ message: "Profile image is required" })
-            .optional(),
+          // profileImg: z
+          //   .string()
+          //   .nonempty({ message: "Profile image is required" })
+          //   .optional(),
           guardian: UpdateGuardianSchema,
           blood: z
             .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
