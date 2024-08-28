@@ -1,6 +1,4 @@
-
 import { z } from "zod";
-
 
 // Address validation schema
 const AddressSchema = z.object({
@@ -10,7 +8,7 @@ const AddressSchema = z.object({
   permanentAddress: z
     .string()
     .nonempty({ message: "Permanent address is required" }),
-  zip: z.number().positive({ message: "ZIP code must be a positive number" }),
+  zip: z.string().nonempty({ message: "ZIP code must be a positive number" }),
   district: z.string().nonempty({ message: "District is required" }),
 });
 
@@ -67,7 +65,10 @@ const CreateStudentSchemaZod = z.object({
         message: "Gender is required",
       }),
       address: AddressSchema,
-      profileImg: z.string().nonempty({ message: "Profile image is required" }).optional(),
+      profileImg: z
+        .string()
+        .nonempty({ message: "Profile image is required" })
+        .optional(),
       guardian: GuardianSchema,
       blood: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
         message: "Blood type is required",
@@ -94,8 +95,8 @@ const UpdateAddressSchema = z.object({
     .nonempty({ message: "Permanent address is required" })
     .optional(),
   zip: z
-    .number()
-    .positive({ message: "ZIP code must be a positive number" })
+    .string()
+    .nonempty({ message: "ZIP code must be a positive number" })
     .optional(),
   district: z.string().nonempty({ message: "District is required" }).optional(),
 });
@@ -141,7 +142,8 @@ const UpdateNameSchema = z.object({
 });
 
 const UpdateStudentSchemaZod = z.object({
-  body: z.object({
+  body: z
+    .object({
       // student
       student: z
         .object({

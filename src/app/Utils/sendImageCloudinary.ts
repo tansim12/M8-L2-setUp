@@ -39,6 +39,8 @@ export const sendImageCloudinary = async (name: string, path: string) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+
+    //* should be set folder name  
     cb(null, process.cwd() + "/uploads/");
   },
   filename: function (req, file, cb) {
