@@ -85,11 +85,11 @@ const allStudents = async (queryParams: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-
+  const meta = await studentQuery.countTotal();
   const result = await studentQuery.modelQuery;
 
   if (result.length) {
-    return result;
+    return { meta, result };
   } else {
     throw new AppError(404, "Data Not found");
   }
@@ -97,7 +97,7 @@ const allStudents = async (queryParams: Record<string, unknown>) => {
 
 // get one student
 const oneStudent = async (id: string) => {
-  const result = await StudentModel.findById( id )
+  const result = await StudentModel.findById(id)
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -119,12 +119,12 @@ const deleteById = async (id: string) => {
     await session.startTransaction();
 
     const studentDeleteResult = await StudentModel.findByIdAndUpdate(
-       id ,
+      id,
       { isDelete: true },
       { new: true, session }
     );
 
-    const userId = studentDeleteResult?.user  // gets studentDeleteResult by user 
+    const userId = studentDeleteResult?.user; // gets studentDeleteResult by user
 
     if (studentDeleteResult) {
       const deleteUserResult = await UserModel.findByIdAndUpdate(
