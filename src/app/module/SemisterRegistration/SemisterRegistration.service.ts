@@ -39,7 +39,7 @@ const createSemesterRegistrationDB = async (
   if (statusUpcomingAndOngoing) {
     throw new AppError(
       httpStatus.CONFLICT,
-      ` Semester Is ${statusUpcomingAndOngoing?.status} status !`
+       `There is aready an ${statusUpcomingAndOngoing?.status} registered semester !`
     );
   }
 
