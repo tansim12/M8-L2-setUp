@@ -22,6 +22,8 @@ router.post(
 
 router.post(
   "/academic-faculty-create",
+  upload.single("file"),
+  jsonDataSetMiddleware,
   validationMiddleWare(
     AcademicZodValidationSchema.CreateAcademicFacultySchemaZod
   ),

@@ -46,7 +46,7 @@ const updateCourse: RequestHandler = async (req, res, next) => {
 const findOneCourse: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result: any = await courseService.findOneCourseDB(id);
+    const result = await courseService.findOneCourseDB(id);
     res
       .status(200)
       .send(successResponse(result, "One Course Find Successfully done"));
@@ -57,7 +57,7 @@ const findOneCourse: RequestHandler = async (req, res, next) => {
 const deleteCourse: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result: any = await courseService.deleteOneCourseDB(id);
+    const result = await courseService.deleteOneCourseDB(id);
     res
       .status(200)
       .send(successResponse(result, "Course Deleted Successfully done"));

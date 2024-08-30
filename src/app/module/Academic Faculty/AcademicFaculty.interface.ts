@@ -36,6 +36,6 @@ export interface TAcademicFaculty {
   blood: TBloodGroup;
   address: TAddress;
   contactNo: string;
-  profileImg?: any;
+  profileImg?: string;
   isDelete: boolean;
 }

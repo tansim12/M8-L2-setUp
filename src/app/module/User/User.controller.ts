@@ -32,7 +32,11 @@ const createFaculty = async (
     const faculty = req.body.faculty;
     const password = req.body.password;
 
-    const result = await userService.createAcademicFacultyDB(faculty, password);
+    const result = await userService.createAcademicFacultyDB(
+      faculty,
+      password,
+      req?.file
+    );
     res
       .status(200)
       .send(successResponse(result, "User Create Successfully done"));

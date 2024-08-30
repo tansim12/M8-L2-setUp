@@ -46,7 +46,6 @@ const CreateAcademicFacultySchemaZod = z.object({
       }),
       address: CreateAddressSchemaZod,
       contactNo: z.string().nonempty({ message: "Contact number is required" }),
-      profileImg: z.any().optional(),
       isDelete: z.boolean().default(false),
     }),
   }),

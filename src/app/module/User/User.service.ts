@@ -46,7 +46,7 @@ const createStudentDB = async (
       const name = `${userData?.id} ${studentData?.name?.firstName}`;
       // image hosting
       const profileImg = await sendImageCloudinary(name, filePath);
-     
+
       // create a user   operation write -1
       const userResult = await UserModel.create([userData], { session });
 
@@ -81,12 +81,13 @@ const createStudentDB = async (
 
 const createAcademicFacultyDB = async (
   payload: Partial<TAcademicFaculty>,
-  password: string
+  password: string,
+  file: any
 ) => {
   const type: string = "faculty";
   const session = await mongoose.startSession();
   let userData: Partial<TUser> = {};
-  userData.password = password || "565896322";
+  userData.password = password || "password12345";
   userData.id = await generateDynamicId(type);
   userData.role = "faculty";
 
@@ -96,7 +97,11 @@ const createAcademicFacultyDB = async (
     if (userResult.length) {
       payload.id = userResult[0]?.id;
       payload.user = userResult[0]?._id;
+      const name = `${userData?.id} ${payload?.name?.firstName}`;
 
+      const profileImg = await sendImageCloudinary(name, file?.path);
+      
+      payload.profileImg = profileImg;
       const facultyResult = await AcademicFacultyModel.create([payload], {
         session,
       });
