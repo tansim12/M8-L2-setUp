@@ -177,11 +177,34 @@ const deleteFacultyCoursesDB = async (
   }
 };
 
+const findAssignFacultiesDB = async (id: string) => {
+  // const existFacultiesCourses = await FacultyCoursesModel.findById(id)
+  //   .populate({
+  //     path: "faculties",
+  //     populate: {
+  //       path: "academicDepartment", // This populates the academicDepartment inside each faculty
+  //     },
+  //   });
+
+  const existFacultiesCourses = await FacultyCoursesModel.findById(id).populate(
+    {
+      path: "faculties",
+    }
+  );
+
+  if (!existFacultiesCourses) {
+    throw new AppError(404, "Faculties Courses not found");
+  }
+  return existFacultiesCourses;
+};
+
 export const courseService = {
   deleteOneCourseDB,
   updateOneCourseDB,
   findOneCourseDB,
   findAllCourseDB,
   createCourseDB,
-  createFacultyCoursesDB,deleteFacultyCoursesDB
+  createFacultyCoursesDB,
+  deleteFacultyCoursesDB,
+  findAssignFacultiesDB,
 };

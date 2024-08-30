@@ -90,6 +90,18 @@ const deleteFacultyCourses: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+const findAssignFaculties: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params?.courseId;
+    const result = await courseService.findAssignFacultiesDB(id);
+    res
+      .status(200)
+      .send(successResponse(result, "Assign faculties Find Successfully done"));
+  } catch (error) {
+    next(error);
+  }
+};
 export const courseController = {
   findAllCourse,
   updateCourse,
@@ -98,4 +110,5 @@ export const courseController = {
   createCourse,
   assignFaculty,
   deleteFacultyCourses,
+  findAssignFaculties,
 };

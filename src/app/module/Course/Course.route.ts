@@ -48,4 +48,11 @@ router.delete(
   courseController.deleteFacultyCourses
 );
 
+
+router.get(
+  "/assign-faculty/:courseId",
+  authMiddleWare(USER_ROLE.admin, USER_ROLE.faculty, ),
+  courseController.findAssignFaculties
+);
+
 export const courseRoute = router;
