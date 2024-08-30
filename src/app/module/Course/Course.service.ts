@@ -189,6 +189,7 @@ const findAssignFacultiesDB = async (id: string) => {
   const existFacultiesCourses = await FacultyCoursesModel.findById(id).populate(
     {
       path: "faculties",
+      select: "name _id",
     }
   );
 
